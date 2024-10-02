@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+
+
+<head>
+
+    <title>Beranda</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar(page = 'Beranda')"></nav>
+
+
+    <div class="d-flex justify-content-center">
+        <h2 class="mt-4 pt-4" th:text="'Hello '+${#httpServletRequest.remoteUser}+'!'">Login as</h2>
+    </div>
+<!--    <div class="d-flex justify-content-center">-->
+
+<!--        <div class="card m-4 p-4">-->
+<!--            <div class="card-body">-->
+<!--                <div class="m-4">-->
+<!--                    <h2>Selamat datang di Adverstar</h2>-->
+<!--                    <div class="container d-flex justify-content-center align-items-center">-->
+<!--                    <img th:src="@{/img/adverstar-logo.png}" width="250px" alt="logo">-->
+<!--                    </div>-->
+<!--                    <div sec:authorize="hasAuthority('Admin')">-->
+<!--                        <div class="d-flex justify-content-center">-->
+<!--                            <a th:href="@{/manager/viewall}" class="mx-2 btn btn-primary">Lihat semua Manager</a>-->
+<!--                            <a th:href="@{/manager/add}" class="mx-2 btn btn-outline-primary">Tambahan Manager</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div sec:authorize="hasAuthority('Admin')">-->
+<!--                    <div class="my-3 d-flex justify-content-center">-->
+<!--                        <a th:href="@{/sales/viewall}" class="mx-2 btn btn-primary">Lihat Semua Sales</a>-->
+<!--                        <a th:href="@{/sales/add}" class="mx-2 btn btn-outline-primary">Tambahan Sales</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;        <div sec:authorize="hasAuthority('Admin')">&ndash;&gt;-->
+<!--                &lt;!&ndash;            <div class="my-3 d-flex justify-content-center">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <a th:href="@{/user/viewall}" class="mx-2 btn btn-outline-success">Lihat Semua User</a>&ndash;&gt;-->
+<!--                &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--                &lt;!&ndash; </div> &ndash;&gt;-->
+<!--                <div sec:authorize="hasAuthority('Admin')">-->
+<!--                    <div class="my-3 d-flex justify-content-center">-->
+<!--                        <a th:href="@{/sponsor/viewall}" class="mx-2 btn btn-primary">Lihat Semua Sponsor</a>-->
+<!--                        <a th:href="@{/sponsor/add}" class="mx-2 btn btn-outline-primary">Tambahan Sponsor</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div sec:authorize="hasAuthority('Sponsor')">-->
+<!--                    <div class="my-3 d-flex justify-content-center">-->
+<!--                        <a th:href="@{/sponsor/kontrak/viewall}" class="mx-2 btn btn-primary">Lihat Semua-->
+<!--                            Kontrak</a>-->
+<!--                        <a th:href="@{/sponsor/kontrak/add}" class="mx-2 btn btn-outline-primary">Tambahan-->
+<!--                            Kontrak</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div sec:authorize="hasAuthority('Manager')">-->
+<!--                    <div class="my-3 d-flex justify-content-center">-->
+<!--                        <a th:href="@{/manager/kontrak/viewall}" class="mx-2 btn btn-primary">Lihat Semua-->
+<!--                            Kontrak</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div sec:authorize="hasAuthority('Sales')">-->
+<!--                    <div class="my-3 d-flex justify-content-center">-->
+<!--                        <a th:href="@{/sales/kontrak/viewall}" class="mx-2 btn btn-primary">Lihat Semua-->
+<!--                            Kontrak</a>-->
+<!--                        <a th:href="@{/sales/kontrak/viewDashboard}" class="mx-2 btn btn-primary">Lihat Dashboard</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </div>-->
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>View User</title>
+
+  <head th:fragment="css">
+    <link th:href="@{/img/logo_jamkrindo.jpg}" rel="icon">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  </head>
+
+  <head th:fragment="js">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFIBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+  </head>
+</head>
+
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img th:src="@{/img/logo_jamkrindo.jpg}" width="40px" alt="logo">
+  </a>
+  <a class="navbar-brand font-weight-bold text-primary" href="#">Jamkrindo</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li th:classappend="${page == 'Beranda'} ? active : ''" class="nav-item">
+        <a class="nav-link" href="/">Beranda</a>
+      </li>
+<!--      <li sec:authorize="hasAuthority('Sales')" th:classappend="${page == 'Kontrak'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/sales/kontrak/viewall">Daftar Kontrak</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Manager')" th:classappend="${page == 'Kontrak'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/manager/kontrak/viewall">Daftar Kontrak</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Sponsor')" th:classappend="${page == 'Kontrak'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/sponsor/kontrak/viewall">Daftar Kontrak</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Sponsor')" th:classappend="${page == 'Dashboard'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/sponsor/dashboard">Dashboard</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Admin')" th:classappend="${page == 'Manager'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/manager/viewall">Manager</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Admin')" th:classappend="${page == 'Sales'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/sales/viewall">Sales</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Admin')" th:classappend="${page == 'Sponsor'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/sponsor/viewall">Sponsor</a>-->
+      </li>
+<!--      <li th:classappend="${page == 'Penyelenggara'} ? active : ''" class="nav-item">-->
+<!--        <a class="nav-link" href="/penyelenggara/viewall">Penyelenggara</a>-->
+<!--      </li>-->
+<!--      <li sec:authorize="hasAuthority('Admin')" class="nav-item"-->
+<!--          th:classappend="${page == 'User'} ? active : ''">-->
+<!--        <a class="nav-link" th:href="@{/user/viewall}">User</a>-->
+<!--      </li>-->
+    </ul>
+
+<!--    <form class="form-inline my-2 my-lg-0" th:action="@{/agensi/view}" method="GET">-->
+<!--      <input class="form-control mr-sm-2" type="search" name="code" placeholder="Code Course"-->
+<!--             aria-label="Search">-->
+<!--      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>-->
+<!--    </form>-->
+    <ul class="navbar-nav pull-right">
+      <a class="nav-item text-text-secondary" th:href="@{/logout}">Logout</a>
+    </ul>
+  </div>
+</nav>
+<footer th:fragment="footer(page)" class="footer text-center">
+  <p>Copyright &copy; Mohamad Arvin Fadriansyah - 2023</p>
+
+</footer>
+</body>
+
+
+</html>
