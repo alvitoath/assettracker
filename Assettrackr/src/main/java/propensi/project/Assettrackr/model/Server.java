@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "server")
-public class ServerModel {
+public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -38,15 +38,15 @@ public class ServerModel {
     @JoinTable(name = "server_developer",
             joinColumns = @JoinColumn(name = "id_server", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_developer", referencedColumnName = "id"))
-    private List<DeveloperModel> listDeveloper;
+    private List<Developer> listDeveloper;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     @JoinColumn(name = "software_id", nullable = false) // Foreign key column
-    private SoftwareModel software;
+    private Software software;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     @JoinColumn(name = "divisi_id", nullable = false) // Foreign key column
-    private DivisiModel divisi;
+    private Divisi divisi;
 }

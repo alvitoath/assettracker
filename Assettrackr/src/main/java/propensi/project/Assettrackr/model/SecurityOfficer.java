@@ -11,5 +11,5 @@ import javax.persistence.Table;
 @Table(name = "security_officer")
 @Getter
 @Setter
-public class SecurityOfficerModel extends UserModel{
+public class SecurityOfficer extends UserModel {
 }

@@ -1,6 +1,6 @@
 package propensi.project.Assettrackr.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "software")
-public class SoftwareModel {
+@Table(name = "divisi")
+public class Divisi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -28,18 +28,7 @@ public class SoftwareModel {
     @Column(name = "nama", nullable = false)
     private String nama;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "framework", nullable = false)
-    private String framework;
-
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "versi", nullable = false)
-    private String versi;
-
-    // One-to-Many with ServerModel
-    @OneToMany(mappedBy = "software", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ServerModel> listServer;
+    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Server> listServer;
 
 }

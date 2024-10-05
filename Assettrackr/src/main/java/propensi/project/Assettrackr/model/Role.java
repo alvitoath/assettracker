@@ -1,7 +1,5 @@
 package propensi.project.Assettrackr.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -18,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name = "role")
-public class RoleModel implements Serializable {
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,6 +28,6 @@ public class RoleModel implements Serializable {
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<UserModel> userRole;
+    private List<UserModel> userModelRole;
 }
 

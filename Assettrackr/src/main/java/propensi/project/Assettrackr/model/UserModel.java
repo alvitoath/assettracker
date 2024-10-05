@@ -65,7 +65,7 @@ public class UserModel implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private RoleModel role;
+    private Role role;
 
 
 }

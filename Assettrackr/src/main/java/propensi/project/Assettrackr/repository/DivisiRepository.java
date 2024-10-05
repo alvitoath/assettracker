@@ -2,8 +2,8 @@ package propensi.project.Assettrackr.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import propensi.project.Assettrackr.model.DivisiModel;
+import propensi.project.Assettrackr.model.Divisi;
 
 @Repository
-public interface DivisiDb extends JpaRepository<DivisiModel, Integer> {
+public interface DivisiRepository extends JpaRepository<Divisi, Integer> {
 }

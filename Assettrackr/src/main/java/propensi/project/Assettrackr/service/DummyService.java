@@ -2,10 +2,13 @@ package propensi.project.Assettrackr.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import propensi.project.Assettrackr.model.*;
+import propensi.project.Assettrackr.model.Admin;
+import propensi.project.Assettrackr.model.Developer;
+import propensi.project.Assettrackr.model.Operator;
+import propensi.project.Assettrackr.model.SecurityOfficer;
+import propensi.project.Assettrackr.model.Role;
 import propensi.project.Assettrackr.repository.*;
 
 import javax.transaction.Transactional;
@@ -16,28 +19,28 @@ import java.util.Optional;
 @Transactional
 public class DummyService {
     @Autowired
-    private UserDb userDb;
+    private UserRepository userRepository;
 
     @Autowired
-    private AdminDb adminDb;
+    private AdminRepository adminDb;
 
     @Autowired
-    private DeveloperDb developerDb;
+    private DeveloperRepository developerRepository;
 
     @Autowired
-    private OperatorDb operatorDb;
+    private OperatorRepository operatorRepository;
 
     @Autowired
-    private SecurityOfficerDb securityOfficerDb;
+    private SecurityOfficerRepository securityOfficerRepository;
 
     @Autowired
-    private RoleDb roleDb;
+    private RoleRepository roleRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public void createUser() {
-        var admin1 = new AdminModel();
+        var admin1 = new Admin();
         admin1.setUsername("admin1");
 
         // Encode the password before setting it
@@ -50,7 +53,7 @@ public class DummyService {
         admin1.setTanggal_lahir("17 Agustus 1945");
 
         // Assuming you have fetched the 'RoleModel' corresponding to the admin role (id = 1)
-        Optional<RoleModel> adminRole = roleDb.findRoleById(1);
+        Optional<Role> adminRole = roleRepository.findRoleById(1);
         if (adminRole.isPresent()) {
             admin1.setRole(adminRole.get());  // Extract the RoleModel from the Optional and set it
         } else {
@@ -64,7 +67,7 @@ public class DummyService {
         // Save the admin1 object to the database
         adminDb.save(admin1);
 
-        var developer1 = new DeveloperModel();
+        var developer1 = new Developer();
         developer1.setUsername("developer1");
 
         // Encode the password before setting it
@@ -78,7 +81,7 @@ public class DummyService {
         developer1.setBidangKeahlian("Back End");
 
         // Assuming you have fetched the 'RoleModel' corresponding to the admin role (id = 1)
-        Optional<RoleModel> developerRole = roleDb.findRoleById(1);
+        Optional<Role> developerRole = roleRepository.findRoleById(1);
         if (developerRole.isPresent()) {
             developer1.setRole(developerRole.get());  // Extract the RoleModel from the Optional and set it
         } else {
@@ -90,9 +93,9 @@ public class DummyService {
         developer1.setFoto(null); // Set to actual photo byte array if available
 
         // Save the admin1 object to the database
-        developerDb.save(developer1);
+        developerRepository.save(developer1);
 
-        var securityOfficer1 = new SecurityOfficerModel();
+        var securityOfficer1 = new SecurityOfficer();
         securityOfficer1.setUsername("securityOfficer1");
 
 // Encode the password before setting it
@@ -105,7 +108,7 @@ public class DummyService {
         securityOfficer1.setTanggal_lahir("17 Agustus 1945");
 
 // Assuming you have fetched the 'RoleModel' corresponding to the security officer role (id = 2)
-        Optional<RoleModel> securityOfficerRole = roleDb.findRoleById(4);
+        Optional<Role> securityOfficerRole = roleRepository.findRoleById(4);
         if (securityOfficerRole.isPresent()) {
             securityOfficer1.setRole(securityOfficerRole.get());  // Extract the RoleModel from the Optional and set it
         } else {
@@ -117,9 +120,9 @@ public class DummyService {
         securityOfficer1.setFoto(null); // Set to actual photo byte array if available
 
 // Save the securityOfficer1 object to the database
-        securityOfficerDb.save(securityOfficer1);
+        securityOfficerRepository.save(securityOfficer1);
 
-        var operator1 = new OperatorModel();
+        var operator1 = new Operator();
         operator1.setUsername("operator1");
 
 // Encode the password before setting it
@@ -132,7 +135,7 @@ public class DummyService {
         operator1.setTanggal_lahir("17 Agustus 1945");
 
 // Assuming you have fetched the 'RoleModel' corresponding to the operator role (id = 3)
-        Optional<RoleModel> operatorRole = roleDb.findRoleById(3);
+        Optional<Role> operatorRole = roleRepository.findRoleById(3);
         if (operatorRole.isPresent()) {
             operator1.setRole(operatorRole.get());  // Extract the RoleModel from the Optional and set it
         } else {
@@ -144,7 +147,7 @@ public class DummyService {
         operator1.setFoto(null); // Set to actual photo byte array if available
 
 // Save the operator1 object to the database
-        operatorDb.save(operator1);
+        operatorRepository.save(operator1);
 
 
     }

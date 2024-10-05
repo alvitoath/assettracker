@@ -1,9 +1,7 @@
 package propensi.project.Assettrackr.model;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,7 +13,7 @@ import java.util.List;
 @Table(name = "developer")
 @Getter
 @Setter
-public class DeveloperModel extends UserModel{
+public class Developer extends UserModel {
 
     @NotNull
     @Size(max = 50)
@@ -24,5 +22,5 @@ public class DeveloperModel extends UserModel{
 
     @ManyToMany(mappedBy = "listDeveloper")
     @PrimaryKeyJoinColumn
-    private List<ServerModel> listServer;
+    private List<Server> listServer;
 }

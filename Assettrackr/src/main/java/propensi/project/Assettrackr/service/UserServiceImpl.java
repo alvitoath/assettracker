@@ -14,23 +14,23 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDb userDb;
+    private UserRepository userRepository;
 
     @Autowired
-    private AdminDb adminDb;
+    private AdminRepository adminDb;
 
     @Autowired
-    private DeveloperDb developerDb;
+    private DeveloperRepository developerRepository;
 
     @Autowired
-    private OperatorDb operatorDb;
+    private OperatorRepository operatorRepository;
 
     @Autowired
-    private SecurityOfficerDb securityOfficerDb;
+    private SecurityOfficerRepository securityOfficerRepository;
 
     @Override
     public UserModel getUserById(String id) {
-        Optional<UserModel> user = userDb.findUserById(id);
+        Optional<UserModel> user = userRepository.findUserById(id);
         return user.orElse(null);
     }
 
