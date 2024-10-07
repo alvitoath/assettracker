@@ -27,5 +27,45 @@ public class ServerController {
         }
     }
 
+    @GetMapping("/divisi/{divisi}")
+    public ResponseEntity<List<GetServerResponse>> getServerByDivisi(@PathVariable("divisi")String divisi){
+        try {
+            List<GetServerResponse> response = service.getServerDivisi(divisi);
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteServer(@PathVariable("id") Integer id){
+        try {
+            String response = service.deleteServer(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateServer(@PathVariable("id") Integer id, @RequestBody ServerUpdateRequest request){
+        try {
+            boolean result = service.updateServer(id, request);
+            if (result) return ResponseEntity.ok("success");
+            else return ResponseEntity.badRequest().body("Data is not valid");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ServerDetailResponse> detailSever(@PathVariable("id") Integer id){
+        try {
+            ServerDetailResponse response= service.getServerDetail(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
 

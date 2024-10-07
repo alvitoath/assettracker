@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import propensi.project.Assettrackr.model.Server;
 
 @Repository
-public interface ServerRepository extends JpaRepository<Server, String> {
+public interface ServerRepository extends JpaRepository<Server, Integer> {
+
 }
