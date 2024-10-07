@@ -3,7 +3,6 @@ package propensi.project.Assettrackr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import propensi.project.Assettrackr.service.UserService;
 
 @Controller
 public class UserController {

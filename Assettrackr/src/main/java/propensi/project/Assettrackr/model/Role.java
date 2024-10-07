@@ -12,22 +12,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Setter
-@Getter
-@Table(name = "role")
-public class Role implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(name = "role", nullable = false)
-    private String role;
-
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<UserModel> userModelRole;
+public enum Role {
+    Admin, Anggota, Security, Operational
 }
 

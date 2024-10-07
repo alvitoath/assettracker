@@ -1,10 +1,7 @@
 package propensi.project.Assettrackr.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "divisi")
 public class Divisi {
     @Id
@@ -28,7 +26,17 @@ public class Divisi {
     @Column(name = "nama", nullable = false)
     private String nama;
 
+    @Column(name="keterangan")
+    private String keterangan;
+
     @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Server> listServer;
+
+    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserModel> listUser;
+
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
 
 }

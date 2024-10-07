@@ -1,4 +1,4 @@
-package propensi.project.Assettrackr.security;
+package propensi.project.Assettrackr.security.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel user = userRepository.findByUsername(username);
+        UserModel user = userRepository.findByUsername(username).get();// TODO: validate
         Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
         return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }
