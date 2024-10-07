@@ -36,4 +36,15 @@ public class DivisiServiceImpl implements DivisiService{
         return "Success";
     }
 
+    @Override
+    public Divisi updateDivisi(Integer id, CreateUpdateDivisiRequest request) throws RuntimeException{
+        Optional<Divisi> divisiOpt = divisiRepository.findById(id);
+        if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
+
+        Divisi divisi = divisiOpt.get();
+        if (!request.getNama().isEmpty()) divisi.setNama(request.getNama());
+        if (!request.getKeterangan().isEmpty()) divisi.setKeterangan(request.getKeterangan());
+
+        return divisiRepository.save(divisi);
+    }
 }

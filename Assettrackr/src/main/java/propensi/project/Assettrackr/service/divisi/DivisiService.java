@@ -10,6 +10,6 @@ public interface DivisiService {
     public List<Divisi> getAllDivisi();
 
     public String deleteDivisi(Integer id)throws RuntimeException;
-
+    public Divisi updateDivisi(Integer id, CreateUpdateDivisiRequest request) throws RuntimeException;
 }
 
