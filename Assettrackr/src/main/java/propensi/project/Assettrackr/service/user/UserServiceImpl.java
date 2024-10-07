@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(UserModel.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
+                .nama(request.getNama())
                 .divisi(divisi)
                 .role(Role.valueOf(request.getRole()))
                 .password(encrypt(password))

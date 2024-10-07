@@ -1,6 +1,7 @@
 package propensi.project.Assettrackr.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,9 +30,11 @@ public class Divisi {
     @Column(name="keterangan")
     private String keterangan;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Server> listServer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserModel> listUser;
 

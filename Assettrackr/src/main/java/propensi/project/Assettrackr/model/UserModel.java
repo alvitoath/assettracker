@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -47,6 +48,7 @@ public class UserModel {
     private String password;
 
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(name = "foto")
     private byte[] foto;
 
