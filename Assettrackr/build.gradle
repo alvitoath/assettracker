@@ -1,3 +1,5 @@
+build gradle
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.14'
@@ -17,25 +19,34 @@ repositories {
 
 dependencies {
 	implementation 'com.h2database:h2'
-	testImplementation("org.assertj:assertj-core:3.11.1")
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-	testCompileOnly('org.mockito:mockito-junit-jupiter:2.23.0')
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.projectlombok:lombok:1.18.22'
-	implementation 'org.projectlombok:lombok:1.18.22'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'mysql:mysql-connector-java:8.0.28'
-	compileOnly("org.projectlombok:lombok:1.18.24")
-	annotationProcessor('org.projectlombok:lombok:1.18.24')
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.3'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation 'org.mapstruct:mapstruct:1.5.0.Final'
+	implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
 	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	runtimeOnly 'org.postgresql:postgresql'
+
+	compileOnly "org.projectlombok:lombok:1.18.24"
+
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.0.Final'
+
+	testImplementation "org.assertj:assertj-core:3.11.1"
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	testCompileOnly 'org.mockito:mockito-junit-jupiter:2.23.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
