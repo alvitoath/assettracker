@@ -32,7 +32,35 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Override
+    public String createUser(CreateUserRequest request) throws RuntimeException {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()){
+            System.out.println("username found");
+            throw new RuntimeException("Username sudah terdaftar");
+        } else if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            System.out.println("email found");
+            throw new RuntimeException("Email sudah terdaftar");
+        }
 
+        Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
+        if (divisiOpt.isEmpty()){
+            System.out.println("divisi not found");
+            throw new RuntimeException("Divisi tidak tersedia");
+        }
+
+        Divisi divisi = divisiOpt.get();
+
+        String password = randomPass();
+        userRepository.save(UserModel.builder()
+                .email(request.getEmail())
+                .username(request.getUsername())
+                .divisi(divisi)
+                .role(Role.valueOf(request.getRole()))
+                .password(encrypt(password))
+                .build());
+
+        return password;
+    }
     @Override
     public String login(LoginRequest request) throws RuntimeException{
         Optional<UserModel> userOpt = userRepository.findByUsername(request.getUsername());
@@ -82,5 +110,60 @@ public class UserServiceImpl implements UserService {
                 user.getDivisi().getNama());
         return response;
     }
+    @Override
+    public UserResponse getDetailUserByUsername(String username) throws RuntimeException{
+        Optional<UserModel> userOpt = userRepository.findByUsername(username);
 
+        if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
+        UserModel user = userOpt.get();
+
+        UserResponse response = new UserResponse(
+                user.getId().toString(),
+                user.getUsername(),
+                user.getNama(),
+                user.getEmail(),
+                user.getRole().toString(),
+                user.getDivisi().getNama());
+        return response;
+    }
+    @Override
+    public boolean updateUser(Integer id, UserUpdateRequest request) throws RuntimeException{
+        Optional<UserModel> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
+        UserModel user = userOpt.get();
+
+        if (!request.getUsername().isEmpty()) user.setUsername(request.getUsername());
+        if (!request.getDivisi().isEmpty()){
+            Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
+            if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak dapat ditemukan");
+            user.setDivisi(divisiOpt.get());
+        }
+        if (!request.getRole().isEmpty()) user.setRole(Role.valueOf(request.getRole()));
+        userRepository.save(user);
+        return true;
+    }
+    @Override
+    public boolean deleteUser(Integer id) throws RuntimeException{
+        Optional<UserModel> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
+        UserModel user = userOpt.get();
+        userRepository.delete(user);
+        return true;
+    }
+
+    public String encrypt(String password) {
+        var passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
+
+    private String randomPass(){
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 8) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        return salt.toString();
+    }
 }

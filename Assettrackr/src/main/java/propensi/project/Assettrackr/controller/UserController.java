@@ -19,7 +19,15 @@ public class UserController {
     @Autowired
     private UserService service;
 
-
+    @PostMapping("/create")
+    public ResponseEntity<String> createUser(@RequestBody CreateUserRequest request){
+        try {
+            String password = service.createUser(request);
+            return ResponseEntity.ok(password);
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(Arrays.toString(e.getStackTrace()));
+        }
+    }
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request){
         try {
@@ -43,6 +51,39 @@ public class UserController {
             return ResponseEntity.ok(response);
         } catch (Exception e){
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable("id") Integer id, @RequestBody UserUpdateRequest request){
+        try {
+            boolean result = service.updateUser(id, request);
+            if (result) return ResponseEntity.ok("success");
+            else return ResponseEntity.badRequest().body("Data is not valid");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Integer id){
+        try {
+            boolean success = service.deleteUser(id);
+            if (success) return ResponseEntity.ok("Success");
+            return ResponseEntity.badRequest().body("User not found");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/login-active")
+    public ResponseEntity<UserResponse> getActiveUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserResponse user = service.getDetailUserByUsername(username);
+        if (user != null){
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
