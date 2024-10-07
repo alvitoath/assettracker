@@ -3,8 +3,10 @@ package propensi.project.Assettrackr.service.divisi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
+import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
 import propensi.project.Assettrackr.repository.DivisiRepository;
+import propensi.project.Assettrackr.repository.ServerRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,5 +48,13 @@ public class DivisiServiceImpl implements DivisiService{
         if (!request.getKeterangan().isEmpty()) divisi.setKeterangan(request.getKeterangan());
 
         return divisiRepository.save(divisi);
+    }
+    @Override
+    public List<Server> getServerByDivisi(String nama) throws RuntimeException{
+        Optional<Divisi> divisiOpt = divisiRepository.findByNama(nama);
+        if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
+
+        Divisi divisi = divisiOpt.get();
+        return divisi.getListServer();
     }
 }

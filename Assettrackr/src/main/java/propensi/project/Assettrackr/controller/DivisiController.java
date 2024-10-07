@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.Divisi;
+import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
 import propensi.project.Assettrackr.service.divisi.DivisiService;
 
@@ -52,5 +53,16 @@ public class DivisiController {
         } catch (Exception e){
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @GetMapping("/divisi/{nama}")
+    public ResponseEntity<List<Server>> getServerByDivisi(@PathVariable("nama")String nama){
+        try {
+            List<Server> response = service.getServerByDivisi(nama);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
     }
 }
