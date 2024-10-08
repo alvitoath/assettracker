@@ -13,5 +13,6 @@ public interface DivisiService {
     public String deleteDivisi(Integer id)throws RuntimeException;
     public Divisi updateDivisi(Integer id, CreateUpdateDivisiRequest request) throws RuntimeException;
     public List<Server> getServerByDivisi(String nama) throws RuntimeException;
+    public List<Server> getServerByDivisiId(Integer id) throws RuntimeException;
 }
 

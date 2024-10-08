@@ -64,4 +64,15 @@ public class DivisiController {
         }
 
     }
+
+    @GetMapping("/divisi/{id}")
+    public ResponseEntity<List<Server>> getServerByDivisi(@PathVariable("id")Integer id){
+        try {
+            List<Server> response = service.getServerByDivisiId(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
 }
