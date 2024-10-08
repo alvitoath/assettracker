@@ -1,0 +1,30 @@
+image: gradle:7.6-jdk11 # Using Gradle with Java 11
+
+stages:
+  - build
+  - deploy
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - export PATH=$PATH:/usr/local/bin
+  - echo "Using Railway token for authentication"
+  - echo $RAILWAY_TOKEN | railway login --token
+
+build_job:
+  stage: build
+  script:
+    - gradle clean build -x test
+  artifacts:
+    paths:
+      - build/libs/*.jar
+  only:
+    - main
+
+deploy_job:
+  stage: deploy
+  script:
+    - railway up --detach
+  only:
+    - main
