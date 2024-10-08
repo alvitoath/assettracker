@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
+import propensi.project.Assettrackr.model.Status;
 import propensi.project.Assettrackr.model.dto.CreateUpdateServerRequest;
 import propensi.project.Assettrackr.model.dto.GetServerResponse;
 import propensi.project.Assettrackr.model.dto.ServerDetailResponse;
@@ -25,18 +26,36 @@ public class ServerServiceImpl implements ServerService{
     @Autowired
     private DivisiRepository divisiRepository;
     @Override
-    public Server createServer(CreateUpdateServerRequest request) throws RuntimeException{
+    public Server createServer(CreateUpdateServerRequest request) throws RuntimeException {
+        for (Divisi divisi : divisiRepository.findAll()) {
+            System.out.println(divisi.getNama());
+        }
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
-        if (divisiOpt.isEmpty()){
+        if (divisiOpt.isEmpty()) {
             throw new RuntimeException("Divisi tidak tersedia");
         }
 
         Divisi divisi = divisiOpt.get();
 
+        Status status;
+        try {
+            status = Status.valueOf(request.getStatus());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Status tidak valid. Pilih antara AKTIF, MAINTENANCE, atau NON-AKTIF.");
+        }
+
         return repository.save(Server.builder()
                 .nama(request.getNama())
                 .ipAddress(request.getIpAddress())
-                .divisi(divisi).build());
+                .divisi(divisi)
+                .lokasi(request.getLokasi())
+                .status(status)
+                .sistemOperasi(request.getSistemOperasi())
+                .bahasaPemrograman(request.getBahasaPemrograman())
+                .versiBahasa(request.getVersiBahasa())
+                .framework(request.getFramework())
+                .versiFramework(request.getVersiFramework())
+                .build());
     }
     @Override
     public List<GetServerResponse> getServerDivisi(String namaDivisi) throws RuntimeException{
@@ -46,7 +65,7 @@ public class ServerServiceImpl implements ServerService{
         Divisi divisi = divisiOpt.get();
         List<Server> lstServer = divisi.getListServer();
 
-        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress())).collect(Collectors.toList());
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
     }
     @Override
     public String deleteServer(Integer id) throws RuntimeException{
@@ -70,7 +89,7 @@ public class ServerServiceImpl implements ServerService{
             if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak dapat ditemukan");
             server.setDivisi(divisiOpt.get());
         }
-        if (!request.getIpAddr().isEmpty()) server.setIpAddress(request.getIpAddr());
+        if (!request.getIpAddress().isEmpty()) server.setIpAddress(request.getIpAddress());
         repository.save(server);
         return true;
     }
@@ -81,6 +100,14 @@ public class ServerServiceImpl implements ServerService{
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();
 
-        return new ServerDetailResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama());
+        return new ServerDetailResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(),
+                server.getDivisi().getNama(), server.getLokasi(), server.getStatus().toString(), server.getSistemOperasi(),
+                server.getBahasaPemrograman(), server.getVersiBahasa(), server.getFramework(), server.getVersiFramework());
+    }
+
+    @Override
+    public List<GetServerResponse> getAllServer() throws RuntimeException{
+        List<Server> lstServer = repository.findAll();
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
     }
 }

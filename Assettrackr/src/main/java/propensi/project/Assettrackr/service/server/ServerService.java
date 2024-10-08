@@ -15,4 +15,5 @@ public interface ServerService {
     public String deleteServer(Integer id) throws RuntimeException;
     public boolean updateServer(Integer id, ServerUpdateRequest request) throws RuntimeException;
     public ServerDetailResponse getServerDetail(Integer id) throws RuntimeException;
+    public List<GetServerResponse> getAllServer();
 }

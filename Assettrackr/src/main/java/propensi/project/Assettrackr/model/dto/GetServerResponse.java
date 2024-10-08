@@ -3,6 +3,7 @@ package propensi.project.Assettrackr.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import propensi.project.Assettrackr.model.Divisi;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,5 +11,7 @@ import lombok.NoArgsConstructor;
 public class GetServerResponse {
     private String id;
     private String nama;
-    private String ipAddr;
+    private String ipAddress;
+    private String divisi;
+    private String status;
 }

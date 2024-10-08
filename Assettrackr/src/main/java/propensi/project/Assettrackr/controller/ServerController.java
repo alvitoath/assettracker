@@ -11,19 +11,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/server")
-
 public class ServerController {
 
     @Autowired
     private ServerService service;
 
     @PostMapping("/create")
-    public ResponseEntity<Server> createServer(CreateUpdateServerRequest request){
+    public ResponseEntity<?> createServer(@RequestBody CreateUpdateServerRequest request){
         try {
             Server response = service.createServer(request);
             return ResponseEntity.ok(response);
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -62,6 +61,16 @@ public class ServerController {
     public ResponseEntity<ServerDetailResponse> detailSever(@PathVariable("id") Integer id){
         try {
             ServerDetailResponse response= service.getServerDetail(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<GetServerResponse>> getAllServer(){
+        try {
+            List<GetServerResponse> response = service.getAllServer();
             return ResponseEntity.ok(response);
         } catch (Exception e){
             return ResponseEntity.badRequest().body(null);
