@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getDetail(@PathVariable("id") Integer id){
+    public ResponseEntity<UserResponse> getDetail(@PathVariable("id") String id){
         try {
             UserResponse response= service.getDetailUser(id);
             return ResponseEntity.ok(response);
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable("id") Integer id, @RequestBody UserUpdateRequest request){
+    public ResponseEntity<String> updateUser(@PathVariable("id") String id, @RequestBody UserUpdateRequest request){
         try {
             boolean result = service.updateUser(id, request);
             if (result) return ResponseEntity.ok("success");
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Integer id){
+    public ResponseEntity<String> deleteUser(@PathVariable("id") String id){
         try {
             boolean success = service.deleteUser(id);
             if (success) return ResponseEntity.ok("Success");

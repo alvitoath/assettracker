@@ -25,8 +25,8 @@ import java.util.UUID;
 public class UserModel {
 
     @Id
-    @GeneratedValue
-    private Integer id;
+    @Column(name = "id")
+    private UUID id = UUID.randomUUID();
 
     @NotNull
     @Size(max = 50)
