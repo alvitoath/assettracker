@@ -25,8 +25,12 @@ import java.util.UUID;
 public class UserModel {
 
     @Id
-    @Column(name = "id")
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
 
     @NotNull
     @Size(max = 50)

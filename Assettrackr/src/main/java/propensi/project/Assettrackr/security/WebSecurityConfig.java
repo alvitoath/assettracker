@@ -48,11 +48,18 @@ public class WebSecurityConfig {
 
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry requests) {
         requests
-
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/server/create")).hasAnyAuthority("Admin", "Operational")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/server/update/**")).hasAnyAuthority("Admin", "Operational")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/server/delete/**")).hasAnyAuthority("Admin", "Operational")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/server/divisi/**")).hasAnyAuthority("Admin", "Operational", "Security")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/server/**")).hasAnyAuthority("Admin", "Operational", "Security")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/create")).hasAuthority("Admin")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/delete/**")).hasAuthority("Admin")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/update/**")).hasAuthority("Admin")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/admin/**")).hasAuthority("Admin")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/divisi/all")).hasAnyAuthority("Admin", "Operational", "Security")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/divisi/divisi/**")).hasAnyAuthority("Admin", "Operational", "Security")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/divisi/**")).hasAnyAuthority("Admin", "Operational")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/all")).hasAuthority("Admin")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/login-active")).permitAll()
