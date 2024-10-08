@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/divisi")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DivisiController {
 
     @Autowired
