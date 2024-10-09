@@ -134,6 +134,11 @@ public class UserServiceImpl implements UserService {
         if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
         UserModel user = userOpt.get();
 
+        Optional<UserModel> checkSameNameUser = userRepository.findByUsername(request.getUsername());
+
+        if (checkSameNameUser.isPresent() && !String.valueOf(checkSameNameUser.get().getId()).equals(id)) throw new RuntimeException("Username sudah digunakan");
+
+
         if (!request.getUsername().isEmpty()) user.setUsername(request.getUsername());
         if (!request.getDivisi().isEmpty()){
             Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());

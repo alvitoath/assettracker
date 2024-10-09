@@ -24,7 +24,7 @@ public class UserController {
             String password = service.createUser(request);
             return ResponseEntity.ok(password);
         } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(Arrays.toString(e.getStackTrace()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @PostMapping("/login")
