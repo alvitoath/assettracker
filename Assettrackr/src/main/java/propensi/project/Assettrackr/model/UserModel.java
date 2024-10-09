@@ -1,18 +1,12 @@
 package propensi.project.Assettrackr.model;
 
-
-
-
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -34,17 +28,17 @@ public class UserModel {
 
     @NotNull
     @Size(max = 50)
-    @Column(name = "username", nullable = false,unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @NotNull
     @Size(max = 50)
-    @Column(name = "nama", nullable = false,unique = true)
+    @Column(name = "nama", nullable = false, unique = true)
     private String nama;
 
     @NotNull
     @Size(max = 50)
-    @Column(name = "email", nullable = false,unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotNull
@@ -56,15 +50,12 @@ public class UserModel {
     @Column(name = "foto")
     private byte[] foto;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "divisi_id")
     private Divisi divisi;
-
 
     @NotNull
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
 }

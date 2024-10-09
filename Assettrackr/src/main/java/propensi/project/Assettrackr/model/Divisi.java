@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+@Entity
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Builder
 @Table(name = "divisi")
 public class Divisi {
@@ -27,19 +27,19 @@ public class Divisi {
     @Column(name = "nama", nullable = false)
     private String nama;
 
-    @Column(name="keterangan")
+    @Column(name = "keterangan")
     private String keterangan;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY)
     private List<Server> listServer;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "divisi", fetch = FetchType.LAZY)
     private List<UserModel> listUser;
 
     @Lob
     @Column(name = "foto")
     private byte[] foto;
-
 }
+

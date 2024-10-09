@@ -6,5 +6,6 @@ import propensi.project.Assettrackr.model.Server;
 
 @Repository
 public interface ServerRepository extends JpaRepository<Server, Integer> {
+    long countByDivisiId(Integer divisiId);
 
 }

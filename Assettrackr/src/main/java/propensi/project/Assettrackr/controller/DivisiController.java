@@ -17,13 +17,13 @@ public class DivisiController {
     @Autowired
     private DivisiService service;
     @PostMapping("/create")
-    public ResponseEntity<Divisi> createDivisi(@RequestBody CreateUpdateDivisiRequest request){
+    public ResponseEntity<?> createDivisi(@RequestBody CreateUpdateDivisiRequest request){
         try {
             Divisi response = service.createDivisi(request);
             if (response == null) return ResponseEntity.badRequest().body(null);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -44,13 +44,13 @@ public class DivisiController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Divisi> updateDivisi(@PathVariable("id")Integer id, @RequestBody CreateUpdateDivisiRequest request){
+    public ResponseEntity<?> updateDivisi(@PathVariable("id")Integer id, @RequestBody CreateUpdateDivisiRequest request){
         try {
             Divisi response = service.updateDivisi(id, request);
             if (response == null) return ResponseEntity.badRequest().body(null);
             return ResponseEntity.ok(response);
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
