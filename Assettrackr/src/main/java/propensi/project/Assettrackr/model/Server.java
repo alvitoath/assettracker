@@ -45,7 +45,7 @@ public class Server {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ServerStatus serverStatus;
+    private Status status;
 
     @NotNull
     @Size(max = 50)
