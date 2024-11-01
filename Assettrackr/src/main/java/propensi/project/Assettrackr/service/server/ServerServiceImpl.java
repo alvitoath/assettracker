@@ -101,13 +101,13 @@ public class ServerServiceImpl implements ServerService{
         Server server = serverOpt.get();
 
         return new ServerDetailResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(),
-                server.getDivisi().getNama(), server.getLokasi(), server.getStatus().toString(), server.getSistemOperasi(),
+                server.getDivisi().getNama(), server.getLokasi(), server.getServerStatus().toString(), server.getSistemOperasi(),
                 server.getBahasaPemrograman(), server.getVersiBahasa(), server.getFramework(), server.getVersiFramework());
     }
 
     @Override
     public List<GetServerResponse> getAllServer() throws RuntimeException{
         List<Server> lstServer = repository.findAll();
-        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama(), String.valueOf(server.getServerStatus()))).collect(Collectors.toList());
     }
 }

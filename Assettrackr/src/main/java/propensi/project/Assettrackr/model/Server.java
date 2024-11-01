@@ -7,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Setter
 @Getter
@@ -46,7 +45,7 @@ public class Server {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status;
+    private ServerStatus serverStatus;
 
     @NotNull
     @Size(max = 50)
