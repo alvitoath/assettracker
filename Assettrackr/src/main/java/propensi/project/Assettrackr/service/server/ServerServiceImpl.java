@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.Status;
+import propensi.project.Assettrackr.model.ServerStatus;
 import propensi.project.Assettrackr.model.dto.CreateUpdateServerRequest;
 import propensi.project.Assettrackr.model.dto.GetServerResponse;
 import propensi.project.Assettrackr.model.dto.ServerDetailResponse;
@@ -37,9 +37,9 @@ public class ServerServiceImpl implements ServerService{
 
         Divisi divisi = divisiOpt.get();
 
-        Status status;
+        ServerStatus serverStatus;
         try {
-            status = Status.valueOf(request.getStatus());
+            serverStatus = ServerStatus.valueOf(request.getStatus());
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Status tidak valid. Pilih antara AKTIF, MAINTENANCE, atau NON-AKTIF.");
         }
@@ -49,7 +49,7 @@ public class ServerServiceImpl implements ServerService{
                 .ipAddress(request.getIpAddress())
                 .divisi(divisi)
                 .lokasi(request.getLokasi())
-                .status(status)
+                .serverStatus(serverStatus)
                 .sistemOperasi(request.getSistemOperasi())
                 .bahasaPemrograman(request.getBahasaPemrograman())
                 .versiBahasa(request.getVersiBahasa())
@@ -65,7 +65,7 @@ public class ServerServiceImpl implements ServerService{
         Divisi divisi = divisiOpt.get();
         List<Server> lstServer = divisi.getListServer();
 
-        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getServerStatus()))).collect(Collectors.toList());
     }
     @Override
     public String deleteServer(Integer id) throws RuntimeException{
