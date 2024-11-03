@@ -6,4 +6,5 @@ import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 public interface ServerChangesService {
 
     public ServerChangesResponse createServerChanges(CreateChangesRequest request) throws Exception;
+    public ServerChangesResponse getServerChangesDetail(String id);
 }

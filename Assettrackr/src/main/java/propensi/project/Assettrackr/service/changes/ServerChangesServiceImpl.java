@@ -10,6 +10,8 @@ import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 
 import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ServerChangesServiceImpl implements ServerChangesService{
@@ -30,12 +32,27 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .updatedAt(new Date())
                 .status(request.getStatus())
                 .build());
+
+        return mapper(response);
+    }
+    @Override
+    public ServerChangesResponse getServerChangesDetail(String id){
+        try {
+            UUID uuid = UUID.fromString(id);
+            ServerChanges serverChangesOpt = repository.getReferenceById(uuid);
+            return mapper(serverChangesOpt);
+        } catch (Exception e){
+            throw new RuntimeException("Id is wrong");
+        }
+    }
+
+    private ServerChangesResponse mapper(ServerChanges serverChanges){
         return new ServerChangesResponse(
-                response.getId().toString(),
-                response.getServer().getId().toString(),
-                response.getProblem(), response.getNotes(),
-                response.getCreatedAt().toString(),
-                response.getUpdatedAt().toString(),
-                response.getStatus());
+                serverChanges.getId().toString(),
+                serverChanges.getServer().getId().toString(),
+                serverChanges.getProblem(), serverChanges.getNotes(),
+                serverChanges.getCreatedAt().toString(),
+                serverChanges.getUpdatedAt().toString(),
+                serverChanges.getStatus());
     }
 }
