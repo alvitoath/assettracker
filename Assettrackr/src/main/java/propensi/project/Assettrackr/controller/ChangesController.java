@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.dto.RestResponse;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
@@ -30,6 +31,18 @@ public class ChangesController {
     public ResponseEntity<RestResponse> getServerChangesDetail(@PathVariable("changesId") String id){
         try {
             ServerChangesResponse data = service.getServerChangesDetail(id);
+            RestResponse response = new RestResponse("Here is your data", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/update/{changesId}")
+    public ResponseEntity<RestResponse> updateServerChanges(@PathVariable("changesId")String id, @RequestBody UpdateChangesRequest request){
+        try {
+            ServerChangesResponse data = service.updateServerChanges(id, request);
             RestResponse response = new RestResponse("Here is your data", data);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
