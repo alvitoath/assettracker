@@ -1,10 +1,10 @@
 package propensi.project.Assettrackr.service.server;
 
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.CreateUpdateServerRequest;
-import propensi.project.Assettrackr.model.dto.GetServerResponse;
-import propensi.project.Assettrackr.model.dto.ServerDetailResponse;
-import propensi.project.Assettrackr.model.dto.ServerUpdateRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
+import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
+import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
+import propensi.project.Assettrackr.model.dto.request.ServerUpdateRequest;
 
 import java.util.List;
 

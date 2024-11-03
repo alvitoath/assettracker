@@ -1,4 +1,4 @@
-package propensi.project.Assettrackr.model.dto;
+package propensi.project.Assettrackr.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

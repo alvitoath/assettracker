@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.Status;
-import propensi.project.Assettrackr.model.dto.CreateUpdateServerRequest;
-import propensi.project.Assettrackr.model.dto.GetServerResponse;
-import propensi.project.Assettrackr.model.dto.ServerDetailResponse;
-import propensi.project.Assettrackr.model.dto.ServerUpdateRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
+import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
+import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
+import propensi.project.Assettrackr.model.dto.request.ServerUpdateRequest;
 import propensi.project.Assettrackr.repository.DivisiRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 

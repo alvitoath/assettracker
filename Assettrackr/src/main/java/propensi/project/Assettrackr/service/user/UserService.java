@@ -1,6 +1,10 @@
 package propensi.project.Assettrackr.service.user;
 
-import propensi.project.Assettrackr.model.dto.*;
+import propensi.project.Assettrackr.model.dto.request.CreateUserRequest;
+import propensi.project.Assettrackr.model.dto.request.LoginRequest;
+import propensi.project.Assettrackr.model.dto.request.UserUpdateRequest;
+import propensi.project.Assettrackr.model.dto.response.ListUserResponse;
+import propensi.project.Assettrackr.model.dto.response.UserResponse;
 
 public interface UserService {
 

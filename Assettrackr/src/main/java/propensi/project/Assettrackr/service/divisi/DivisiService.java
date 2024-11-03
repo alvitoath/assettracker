@@ -2,7 +2,7 @@ package propensi.project.Assettrackr.service.divisi;
 
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
 
 import java.util.List;
 

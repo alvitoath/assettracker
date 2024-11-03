@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
 import propensi.project.Assettrackr.repository.DivisiRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 import propensi.project.Assettrackr.repository.UserRepository;

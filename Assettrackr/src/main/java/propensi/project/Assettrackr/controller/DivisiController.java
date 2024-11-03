@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
 import propensi.project.Assettrackr.service.divisi.DivisiService;
 
 import java.util.List;

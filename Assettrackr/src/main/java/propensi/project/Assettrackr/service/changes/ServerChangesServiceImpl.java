@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.ServerChanges;
-import propensi.project.Assettrackr.model.dto.CreateChangesRequest;
-import propensi.project.Assettrackr.model.dto.ServerChangesResponse;
+import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 

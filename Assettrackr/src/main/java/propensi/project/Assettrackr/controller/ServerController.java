@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.*;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
+import propensi.project.Assettrackr.model.dto.request.ServerUpdateRequest;
+import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
+import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
 import propensi.project.Assettrackr.service.server.ServerService;
 
 import java.util.List;

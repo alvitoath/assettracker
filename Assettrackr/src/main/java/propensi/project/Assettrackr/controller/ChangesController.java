@@ -3,8 +3,8 @@ package propensi.project.Assettrackr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import propensi.project.Assettrackr.model.dto.CreateChangesRequest;
-import propensi.project.Assettrackr.model.dto.ServerChangesResponse;
+import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
 @RestController

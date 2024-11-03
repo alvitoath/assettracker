@@ -1,7 +1,7 @@
 package propensi.project.Assettrackr.service.changes;
 
-import propensi.project.Assettrackr.model.dto.CreateChangesRequest;
-import propensi.project.Assettrackr.model.dto.ServerChangesResponse;
+import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 
 public interface ServerChangesService {
 
