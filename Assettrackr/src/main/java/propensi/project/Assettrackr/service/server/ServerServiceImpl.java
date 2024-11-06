@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
+import propensi.project.Assettrackr.model.ServerChanges;
 import propensi.project.Assettrackr.model.Status;
 import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
 import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
@@ -13,6 +14,7 @@ import propensi.project.Assettrackr.repository.DivisiRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,6 +57,7 @@ public class ServerServiceImpl implements ServerService{
                 .versiBahasa(request.getVersiBahasa())
                 .framework(request.getFramework())
                 .versiFramework(request.getVersiFramework())
+                .listServerChanges(new ArrayList<>())
                 .build());
     }
     @Override
@@ -78,7 +81,7 @@ public class ServerServiceImpl implements ServerService{
         return "Success";
     }
     @Override
-    public boolean updateServer(Integer id, ServerUpdateRequest request) throws RuntimeException{
+    public Boolean updateServer(Integer id, ServerUpdateRequest request) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();

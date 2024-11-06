@@ -2,11 +2,13 @@ package propensi.project.Assettrackr.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Setter
 @Getter
@@ -71,4 +73,8 @@ public class Server {
     @Size(max = 20)
     @Column(name = "versi_framework", nullable = false)
     private String versiFramework;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
+    private List<ServerChanges> listServerChanges;
 }

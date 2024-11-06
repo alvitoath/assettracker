@@ -50,4 +50,7 @@ public class ServerChanges {
     @NotNull
     @Column(name = "status", nullable = false)
     private String status; // One process atau draft
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }

@@ -35,6 +35,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .status(request.getStatus())
                 .build());
 
+        server.getListServerChanges().add(response);
+        serverRepository.save(server);
+
         return mapper(response);
     }
     @Override
@@ -62,6 +65,23 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             return mapper(response);
         } catch (Exception e){
             throw new RuntimeException("Id is wrong");
+        }
+    }
+
+
+    public String deleteServer(String id) throws RuntimeException{
+        try {
+            UUID uuid = UUID.fromString(id);
+
+            ServerChanges serverChanges = repository.getReferenceById(uuid);
+            if (!serverChanges.getIsDeleted()){
+                serverChanges.setIsDeleted(true);
+                return "Berhasil menghapus perubahan";
+            }
+
+            return "Perubahan telah dihapus";
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
