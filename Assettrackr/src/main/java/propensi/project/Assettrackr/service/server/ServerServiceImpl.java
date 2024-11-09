@@ -91,6 +91,13 @@ public class ServerServiceImpl implements ServerService{
             server.setDivisi(divisiOpt.get());
         }
         if (!request.getIpAddress().isEmpty()) server.setIpAddress(request.getIpAddress());
+        if (!request.getStatus().isEmpty()) server.setStatus(Status.valueOf(request.getStatus()));
+        if (!request.getSistemOperasi().isEmpty()) server.setSistemOperasi(request.getSistemOperasi());
+        if (!request.getBahasaPemrograman().isEmpty()) server.setBahasaPemrograman(request.getBahasaPemrograman());
+        if (!request.getLokasi().isEmpty()) server.setLokasi(request.getLokasi());
+        if (!request.getVersiBahasa().isEmpty()) server.setVersiBahasa(request.getVersiBahasa());
+        if (!request.getFramework().isEmpty()) server.setFramework(request.getFramework());
+        if (!request.getVersiFramework().isEmpty()) server.setVersiFramework(request.getVersiFramework());
         repository.save(server);
         return true;
     }
