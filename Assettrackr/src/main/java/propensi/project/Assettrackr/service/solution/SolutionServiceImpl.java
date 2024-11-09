@@ -40,4 +40,10 @@ public class SolutionServiceImpl implements SolutionService{
 
         return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
     }
+
+    @Override
+    public ChangesSolutionResponse getDetailSolution(String id) {
+        ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
+        return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
+    }
 }

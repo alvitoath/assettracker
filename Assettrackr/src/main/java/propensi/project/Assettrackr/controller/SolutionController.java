@@ -1,5 +1,6 @@
 package propensi.project.Assettrackr.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,18 @@ public class SolutionController {
         try {
             ChangesSolutionResponse data = service.updateSolution(id, request);
             RestResponse response = new RestResponse("Solusi berhasil diubah", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/detail/{solutionId}")
+    private ResponseEntity<RestResponse> getSolution(@PathVariable("solutionId") String id){
+        try {
+            ChangesSolutionResponse data = service.getDetailSolution(id);
+            RestResponse response = new RestResponse("Berhasil mengambil data", data);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
             RestResponse response = new RestResponse(e.getMessage(), null);
