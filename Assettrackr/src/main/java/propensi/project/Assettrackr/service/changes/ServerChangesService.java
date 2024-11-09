@@ -14,5 +14,6 @@ public interface ServerChangesService {
     public Boolean deleteServer(String id) throws RuntimeException;
 
     public List<ServerChangesResponse> getServerChangesByDivisi(String divisi);
+    List<ServerChangesResponse> getAll();
 
 }

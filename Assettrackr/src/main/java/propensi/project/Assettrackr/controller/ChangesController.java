@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.dto.RestResponse;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
+import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
@@ -73,6 +74,13 @@ public class ChangesController {
     @GetMapping("/divisi/{divisiId}")
     public ResponseEntity<RestResponse> getServerChangesByDivisi(@PathVariable("divisiId") String id){
         List<ServerChangesResponse> data = service.getServerChangesByDivisi(id);
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<RestResponse> getAllDeveloper(){
+        List<ServerChangesResponse> data = service.getAll();
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
