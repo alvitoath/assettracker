@@ -71,7 +71,7 @@ public class ServerServiceImpl implements ServerService{
         return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
     }
     @Override
-    public String deleteServer(Integer id) throws RuntimeException{
+    public String deleteServer(String id) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server tidak ditemukan");
 
@@ -81,7 +81,7 @@ public class ServerServiceImpl implements ServerService{
         return "Success";
     }
     @Override
-    public Boolean updateServer(Integer id, ServerUpdateRequest request) throws RuntimeException{
+    public Boolean updateServer(String id, ServerUpdateRequest request) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();
@@ -98,7 +98,7 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public ServerDetailResponse getServerDetail(Integer id) throws RuntimeException{
+    public ServerDetailResponse getServerDetail(String id) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();

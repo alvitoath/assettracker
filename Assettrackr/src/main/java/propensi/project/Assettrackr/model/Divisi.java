@@ -20,7 +20,7 @@ public class Divisi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
-    private Integer id;
+    private String id;
 
     @NotNull
     @Size(max = 50)

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateChangesRequest {
-    private Integer serverId;
-    private String problem;
-    private String notes;
+    private String serverId;
+    private String tipePerbaikan;
+    private String detailPerbaikan;
     private String status;
 }

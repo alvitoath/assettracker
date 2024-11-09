@@ -37,7 +37,7 @@ public class DivisiServiceImpl implements DivisiService{
         return divisiRepository.findAll();
     }
     @Override
-    public String deleteDivisi(Integer id) throws RuntimeException {
+    public String deleteDivisi(String id) throws RuntimeException {
         Optional<Divisi> divisiOpt = divisiRepository.findById(id);
         if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
 
@@ -55,7 +55,7 @@ public class DivisiServiceImpl implements DivisiService{
     }
 
     @Override
-    public Divisi updateDivisi(Integer id, CreateUpdateDivisiRequest request) throws RuntimeException{
+    public Divisi updateDivisi(String id, CreateUpdateDivisiRequest request) throws RuntimeException{
         Optional<Divisi> divisiOpt = divisiRepository.findById(id);
         if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
         Optional<Divisi> checkSameNameDivisi = divisiRepository.findByNama(request.getNama());
@@ -76,7 +76,7 @@ public class DivisiServiceImpl implements DivisiService{
     }
 
     @Override
-    public List<Server> getServerByDivisiId(Integer id) throws RuntimeException{
+    public List<Server> getServerByDivisiId(String id) throws RuntimeException{
         Optional<Divisi> divisiOpt = divisiRepository.findById(id);
         if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
 

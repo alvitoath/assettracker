@@ -19,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getDetailUser(String id) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
 
         if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
         UserModel user = userOpt.get();
@@ -134,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public boolean updateUser(String id, UserUpdateRequest request) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
         UserModel user = userOpt.get();
 
@@ -155,7 +154,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public boolean deleteUser(String id) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
         UserModel user = userOpt.get();
         userRepository.delete(user);

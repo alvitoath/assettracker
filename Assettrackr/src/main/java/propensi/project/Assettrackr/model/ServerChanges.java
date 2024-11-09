@@ -22,7 +22,7 @@ public class ServerChanges {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    private String id;
 
     @NotNull
     @ManyToOne
@@ -30,27 +30,25 @@ public class ServerChanges {
     private Server server;
 
     @NotNull
-    @Column(name = "problem", nullable = false)
-    private String problem; //Request for update, Power Outages, Natural Element Interference, Hardware Damage ,Cybersecurity Issues, System Overload, Configuration Settings,  Network Glitches, Others
+    @Column(name = "tipe_perbaikan", nullable = false)
+    private String tipePerbaikan; //Request for update, Power Outages, Natural Element Interference, Hardware Damage ,Cybersecurity Issues, System Overload, Configuration Settings,  Network Glitches, Others
 
     @NotNull
-    @Column(name = "notes", nullable = false)
-    private String notes;
-
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    @Column(name = "detail_perbaikan", nullable = false)
+    private String detailPerbaikan;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    @Column(name = "tanggal_dibuat", nullable = false)
+    private Date tanggalDibuat;
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "tanggal_selesai", nullable = false)
+    private Date tanggalSelesai;
 
     @NotNull
     @Column(name = "status", nullable = false)
     private String status; // One process atau draft
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
 }

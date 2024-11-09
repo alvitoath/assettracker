@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UpdateChangesRequest {
-    private String problem;
-    private String notes;
+    private String tipePerbaikan;
+    private String detailPerbaikan;
     private String status;
 }

@@ -11,7 +11,9 @@ import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,10 +30,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         Server server = serverRepository.getReferenceById(request.getServerId());
         ServerChanges response = repository.save(ServerChanges.builder()
                 .server(server)
-                .problem(request.getProblem())
-                .notes(request.getNotes())
-                .createdAt(new Date())
-                .updatedAt(new Date())
+                .tipePerbaikan(request.getTipePerbaikan())
+                .detailPerbaikan(request.getDetailPerbaikan())
+                .tanggalDibuat(new Date())
                 .status(request.getStatus())
                 .build());
 
@@ -43,8 +44,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     @Override
     public ServerChangesResponse getServerChangesDetail(String id){
         try {
-            UUID uuid = UUID.fromString(id);
-            ServerChanges serverChanges = repository.getReferenceById(uuid);
+            ServerChanges serverChanges = repository.getReferenceById(id);
             return mapper(serverChanges);
         } catch (Exception e){
             throw new RuntimeException("Id is wrong");
@@ -54,11 +54,10 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     @Override
     public ServerChangesResponse updateServerChanges(String id, UpdateChangesRequest request){
         try {
-            UUID uuid = UUID.fromString(id);
-            ServerChanges serverChanges = repository.getReferenceById(uuid);
+            ServerChanges serverChanges = repository.getReferenceById(id);
 
-            if (!request.getNotes().isEmpty()) serverChanges.setNotes(request.getNotes());
-            if (!request.getProblem().isEmpty()) serverChanges.setProblem(request.getProblem());
+            if (!request.getTipePerbaikan().isEmpty()) serverChanges.setTipePerbaikan(request.getTipePerbaikan());
+            if (!request.getDetailPerbaikan().isEmpty()) serverChanges.setDetailPerbaikan(request.getDetailPerbaikan());
             if (!request.getStatus().isEmpty()) serverChanges.setStatus(request.getStatus());
 
             ServerChanges response = repository.save(serverChanges);
@@ -69,15 +68,11 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
 
-    public String deleteServer(String id) throws RuntimeException{
+    public String deleteServer(String id) throws RuntimeException, EntityNotFoundException {
         try {
-            UUID uuid = UUID.fromString(id);
 
-            ServerChanges serverChanges = repository.getReferenceById(uuid);
-            if (!serverChanges.getIsDeleted()){
-                serverChanges.setIsDeleted(true);
-                return "Berhasil menghapus perubahan";
-            }
+            ServerChanges serverChanges = repository.getReferenceById(id);
+            repository.delete(serverChanges);
 
             return "Perubahan telah dihapus";
         } catch (Exception e) {
@@ -85,13 +80,18 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         }
     }
 
+    @Override
+    public List<ServerChangesResponse> getServerChangesByDivisi(String divisi) {
+        return null;
+    }
+
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         return new ServerChangesResponse(
                 serverChanges.getId().toString(),
                 serverChanges.getServer().getId().toString(),
-                serverChanges.getProblem(), serverChanges.getNotes(),
-                serverChanges.getCreatedAt().toString(),
-                serverChanges.getUpdatedAt().toString(),
+                serverChanges.getTipePerbaikan(),
+                serverChanges.getDetailPerbaikan(),
+                serverChanges.getTanggalDibuat().toString(),
                 serverChanges.getStatus());
     }
 }

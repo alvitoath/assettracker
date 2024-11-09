@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 public class ServerChangesResponse {
     private String id;
     private String serverId;
-    private String problem;
-    private String notes;
-    private String createdAt;
-    private String updatedAt;
+    private String tipePerbaikan;
+    private String detailPerbaikan;
+    private String tanggalDibuat;
     private String status;
 
 }
