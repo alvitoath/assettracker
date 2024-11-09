@@ -128,11 +128,10 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .tanggalDibuat(serverChanges.getTanggalDibuat().toString())
                 .status(serverChanges.getStatus().toString())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
-                .solutionId(serverChanges.getSolution().getId())
                 .build();
 
         if (serverChanges.getTanggalSelesai() != null) response.setTanggalSelesai(serverChanges.getTanggalSelesai().toString());
-
+        if (serverChanges.getSolution() != null) response.setSolutionId(serverChanges.getSolution().getId());
         return response;
     }
 }
