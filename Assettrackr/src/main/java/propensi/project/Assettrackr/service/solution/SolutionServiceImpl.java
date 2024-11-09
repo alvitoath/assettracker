@@ -30,4 +30,14 @@ public class SolutionServiceImpl implements SolutionService{
         serverChangesRepository.save(serverChanges);
         return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
     }
+
+    @Override
+    public ChangesSolutionResponse updateSolution(String id, ChangesSolutionRequest request) {
+        ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
+        if (!request.getSolusi().isEmpty()) changesSolution.setSolution(request.getSolusi());
+        if (!request.getStatus().isEmpty()) changesSolution.setStatus(SolutionStatus.valueOf(request.getStatus()));
+        solutionRepository.save(changesSolution);
+
+        return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
+    }
 }
