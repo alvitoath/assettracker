@@ -120,16 +120,19 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     private ServerChangesResponse mapper(ServerChanges serverChanges){
-        return ServerChangesResponse.builder()
+        ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
                 .serverId(serverChanges.getServer().getId())
                 .tipePerbaikan(serverChanges.getTipePerbaikan())
                 .detailPerbaikan(serverChanges.getDetailPerbaikan())
                 .tanggalDibuat(serverChanges.getTanggalDibuat().toString())
                 .status(serverChanges.getStatus().toString())
-                .tanggalSelesai(serverChanges.getTanggalSelesai().toString())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
                 .solutionId(serverChanges.getSolution().getId())
                 .build();
+
+        if (serverChanges.getTanggalSelesai() != null) response.setTanggalSelesai(serverChanges.getTanggalSelesai().toString());
+
+        return response;
     }
 }
