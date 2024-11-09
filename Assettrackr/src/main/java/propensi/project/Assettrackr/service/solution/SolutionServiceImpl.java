@@ -10,6 +10,8 @@ import propensi.project.Assettrackr.model.dto.response.ChangesSolutionResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.SolutionRepository;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class SolutionServiceImpl implements SolutionService{
     @Autowired
@@ -45,5 +47,16 @@ public class SolutionServiceImpl implements SolutionService{
     public ChangesSolutionResponse getDetailSolution(String id) {
         ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
         return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
+    }
+
+    @Override
+    public Boolean deleteSolution(String id) throws RuntimeException, EntityNotFoundException {
+        try {
+            ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
+            solutionRepository.delete(changesSolution);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

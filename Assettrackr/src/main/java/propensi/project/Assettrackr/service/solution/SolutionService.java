@@ -7,4 +7,5 @@ public interface SolutionService {
     ChangesSolutionResponse createSolution(String id, ChangesSolutionRequest request);
     ChangesSolutionResponse updateSolution(String id, ChangesSolutionRequest request);
     ChangesSolutionResponse getDetailSolution(String id);
+    Boolean deleteSolution(String id) throws RuntimeException;
 }

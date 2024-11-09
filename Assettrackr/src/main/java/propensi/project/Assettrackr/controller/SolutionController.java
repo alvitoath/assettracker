@@ -51,4 +51,20 @@ public class SolutionController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/delete/{solutionId}")
+    private ResponseEntity<RestResponse> deleteSolution(@PathVariable("solutionId") String id){
+        try {
+            Boolean data = service.deleteSolution(id);
+            if (data){
+                RestResponse response = new RestResponse("solusi berhasil dihapus", null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            RestResponse response = new RestResponse("solusi tidak dapat dihapus", null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 }
