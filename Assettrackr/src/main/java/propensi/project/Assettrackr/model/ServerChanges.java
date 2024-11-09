@@ -41,7 +41,6 @@ public class ServerChanges {
     @Column(name = "tanggal_dibuat", nullable = false)
     private Date tanggalDibuat;
 
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "tanggal_selesai", nullable = false)
     private Date tanggalSelesai;
