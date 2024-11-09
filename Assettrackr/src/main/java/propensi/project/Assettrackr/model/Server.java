@@ -80,4 +80,6 @@ public class Server {
     @JsonIgnore
     @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
     private List<ServerChanges> listServerChanges;
+
+
 }

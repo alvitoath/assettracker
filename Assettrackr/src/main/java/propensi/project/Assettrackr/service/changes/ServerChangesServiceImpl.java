@@ -7,6 +7,7 @@ import propensi.project.Assettrackr.model.Developer;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.ServerChanges;
 import propensi.project.Assettrackr.model.ServerChangesStatus;
+import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;

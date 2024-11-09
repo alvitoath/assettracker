@@ -42,12 +42,15 @@ public class ServerChanges {
     private Date tanggalDibuat;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "tanggal_selesai", nullable = false)
+    @Column(name = "tanggal_selesai")
     private Date tanggalSelesai;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ServerChangesStatus status; // One process atau draft
+
+    @OneToOne(mappedBy = "serverChanges")
+    private ChangesSolution solution;
 
 }
