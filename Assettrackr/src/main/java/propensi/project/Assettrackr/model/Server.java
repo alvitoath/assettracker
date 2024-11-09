@@ -37,9 +37,8 @@ public class Server {
     @Column(name = "ip_address", nullable = false)
     private String ipAddress;
 
-
+    @NotNull
     @ManyToOne
-    @PrimaryKeyJoinColumn
     @JoinColumn(name = "divisi_id", nullable = false) // Foreign key column
     private Divisi divisi;
 

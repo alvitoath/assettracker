@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ServerChangesServiceImpl implements ServerChangesService{
@@ -82,7 +83,8 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
     @Override
     public List<ServerChangesResponse> getServerChangesByDivisi(String divisi) {
-        return null;
+        List<ServerChanges> serverChanges = repository.findServerChangesByDivisi(divisi);
+        return serverChanges.stream().map(this::mapper).collect(Collectors.toList());
     }
 
     private ServerChangesResponse mapper(ServerChanges serverChanges){

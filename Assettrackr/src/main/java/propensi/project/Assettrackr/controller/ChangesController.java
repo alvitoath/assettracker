@@ -10,6 +10,8 @@ import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/changes")
 public class ChangesController {
@@ -62,5 +64,12 @@ public class ChangesController {
             RestResponse response = new RestResponse(e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/divisi/{divisiId}")
+    public ResponseEntity<RestResponse> getServerChangesByDivisi(@PathVariable("divisiId") String id){
+        List<ServerChangesResponse> data = service.getServerChangesByDivisi(id);
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
