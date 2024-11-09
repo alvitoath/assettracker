@@ -57,9 +57,13 @@ public class ChangesController {
     @DeleteMapping("/delete/{changeId}")
     public ResponseEntity<RestResponse> deleteServerChanges(@PathVariable("changeId") String id){
         try {
-            String data = service.deleteServer(id);
-            RestResponse response = new RestResponse(data, null);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            Boolean data = service.deleteServer(id);
+            if (data){
+                RestResponse response = new RestResponse("Perubahan berhasil dihapus", null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            RestResponse response = new RestResponse("Perubahan tidak dapat dihapus", null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             RestResponse response = new RestResponse(e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

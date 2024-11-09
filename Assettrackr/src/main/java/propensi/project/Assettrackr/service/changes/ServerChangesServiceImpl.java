@@ -67,14 +67,17 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         }
     }
 
-
-    public String deleteServer(String id) throws RuntimeException, EntityNotFoundException {
+    @Override
+    public Boolean deleteServer(String id) throws RuntimeException, EntityNotFoundException {
         try {
-            //cek status
             ServerChanges serverChanges = repository.getReferenceById(id);
-            repository.delete(serverChanges);
-
-            return "Perubahan telah dihapus";
+            switch (serverChanges.getStatus()){
+                case Draft:
+                case Ditolak:
+                    repository.delete(serverChanges);
+                    return true;
+            }
+            return false;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
