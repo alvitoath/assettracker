@@ -27,6 +27,7 @@ public class ChangesController {
             ServerChangesResponse response =  service.createServerChanges(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }

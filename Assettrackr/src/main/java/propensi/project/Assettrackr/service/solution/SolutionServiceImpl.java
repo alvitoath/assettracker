@@ -41,6 +41,7 @@ public class SolutionServiceImpl implements SolutionService{
         if (!request.getStatus().isEmpty()) changesSolution.setStatus(SolutionStatus.valueOf(request.getStatus()));
         solutionRepository.save(changesSolution);
 
+        //TODO: fix selesai jadi kalo udah selesai dari developer
         if (SolutionStatus.valueOf(request.getStatus()).equals(SolutionStatus.Solved)){
             ServerChanges serverChanges = changesSolution.getServerChanges();
             serverChanges.setTanggalSelesai(new Date());
