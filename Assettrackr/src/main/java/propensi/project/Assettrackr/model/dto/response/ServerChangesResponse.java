@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ServerChangesResponse {
     private String id;
     private String serverId;
+    private String serverName;
     private String tipePerbaikan;
     private String detailPerbaikan;
     private String tanggalDibuat;

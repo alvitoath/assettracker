@@ -129,6 +129,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
                 .serverId(serverChanges.getServer().getId())
+                .serverName(serverChanges.getServer().getNama())
                 .tipePerbaikan(serverChanges.getTipePerbaikan())
                 .detailPerbaikan(serverChanges.getDetailPerbaikan())
                 .tanggalDibuat(serverChanges.getTanggalDibuat().toString())
