@@ -2,7 +2,6 @@ package propensi.project.Assettrackr.model;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import propensi.project.Assettrackr.model.dto.SolutionStatus;
 
 import javax.persistence.*;
 

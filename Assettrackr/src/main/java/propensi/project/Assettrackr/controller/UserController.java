@@ -12,6 +12,9 @@ import propensi.project.Assettrackr.model.dto.response.ListUserResponse;
 import propensi.project.Assettrackr.model.dto.response.UserResponse;
 import propensi.project.Assettrackr.service.user.UserService;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -25,8 +28,14 @@ public class UserController {
             String password = service.createUser(request);
             return ResponseEntity.ok(password);
         } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(getStackTraceAsString(e));
         }
+    }
+    private String getStackTraceAsString(Throwable e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
     }
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request){

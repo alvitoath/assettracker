@@ -29,9 +29,7 @@ public class ServerServiceImpl implements ServerService{
     private DivisiRepository divisiRepository;
     @Override
     public Server createServer(CreateUpdateServerRequest request) throws RuntimeException {
-        for (Divisi divisi : divisiRepository.findAll()) {
-            System.out.println(divisi.getNama());
-        }
+
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
         if (divisiOpt.isEmpty()) {
             throw new RuntimeException("Divisi tidak tersedia");

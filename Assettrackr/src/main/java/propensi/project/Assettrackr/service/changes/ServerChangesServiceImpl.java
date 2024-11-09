@@ -3,10 +3,7 @@ package propensi.project.Assettrackr.service.changes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import propensi.project.Assettrackr.model.Developer;
-import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.ServerChanges;
-import propensi.project.Assettrackr.model.ServerChangesStatus;
+import propensi.project.Assettrackr.model.*;
 import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
@@ -14,6 +11,7 @@ import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
+import propensi.project.Assettrackr.repository.SolutionRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
@@ -28,6 +26,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     @Autowired
     private ServerRepository serverRepository;
 
+    @Autowired
+    private SolutionRepository solutionRepository;
+
     @Override
     public ServerChangesResponse createServerChanges(CreateChangesRequest request) throws Exception{
         Server server = serverRepository.getReferenceById(request.getServerId());
@@ -39,8 +40,18 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .status(ServerChangesStatus.valueOf(request.getStatus()))
                 .build());
 
+
         server.getListServerChanges().add(response);
         serverRepository.save(server);
+
+        if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim)){
+            ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
+                    .status(SolutionStatus.Unsolved)
+                    .serverChanges(response)
+                    .build());
+            response.setSolution(solution);
+            repository.save(response);
+        }
 
         return mapper(response);
     }
@@ -64,6 +75,16 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             if (!request.getStatus().isEmpty()) serverChanges.setStatus(ServerChangesStatus.valueOf(request.getStatus()));
 
             ServerChanges response = repository.save(serverChanges);
+
+            if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim)){
+                ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
+                        .status(SolutionStatus.Unsolved)
+                        .serverChanges(response)
+                        .build());
+                response.setSolution(solution);
+                repository.save(response);
+            }
+
             return mapper(response);
         } catch (Exception e){
             throw new RuntimeException("Id is wrong");

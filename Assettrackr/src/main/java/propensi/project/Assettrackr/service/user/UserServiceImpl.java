@@ -39,23 +39,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createUser(CreateUserRequest request) throws RuntimeException {
         if (userRepository.findByUsername(request.getUsername()).isPresent()){
-            System.out.println("username found");
             throw new RuntimeException("Username sudah terdaftar");
         } else if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            System.out.println("email found");
             throw new RuntimeException("Email sudah terdaftar");
         }
 
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
         if (divisiOpt.isEmpty()){
-            System.out.println("divisi not found");
             throw new RuntimeException("Divisi tidak tersedia");
         }
 
         Divisi divisi = divisiOpt.get();
 
         String password = randomPass();
-        userRepository.save(UserModel.builder()
+        UserModel userModel = userRepository.save(UserModel.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .nama(request.getNama())
