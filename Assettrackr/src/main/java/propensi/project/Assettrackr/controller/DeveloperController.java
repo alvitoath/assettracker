@@ -35,4 +35,16 @@ public class DeveloperController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/detail/{developerId}")
+    public ResponseEntity<RestResponse> getDetailDeveloper(@PathVariable("developerId")String id){
+        try {
+            DeveloperResponse data = service.getDetailDeveloper(id);
+            RestResponse response = new RestResponse("Successfuly update data", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            RestResponse response = new RestResponse("Id not found", null);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 }

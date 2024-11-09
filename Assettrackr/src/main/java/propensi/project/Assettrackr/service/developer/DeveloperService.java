@@ -7,4 +7,5 @@ import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 public interface DeveloperService {
     DeveloperResponse createDeveloper(CreateDeveloperRequest request);
     DeveloperResponse updateDeveloper(UpdateDeveloperRequest request, String id) throws Exception;
+    DeveloperResponse getDetailDeveloper(String id) throws Exception;
 }

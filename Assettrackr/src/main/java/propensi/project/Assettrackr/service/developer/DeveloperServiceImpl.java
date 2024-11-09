@@ -35,7 +35,17 @@ public class DeveloperServiceImpl implements DeveloperService{
         return mapper(response);
     }
 
+    @Override
+    public DeveloperResponse getDetailDeveloper(String id) throws Exception {
+        Developer developer = repository.getReferenceById(id);
+        return mapper(developer);
+    }
+
     private DeveloperResponse mapper(Developer developer){
-        return new DeveloperResponse(developer.getId(), developer.getNama(), developer.getKeahlian(), developer.getStatus().toString());
+        return new DeveloperResponse(
+                developer.getId(),
+                developer.getNama(),
+                developer.getKeahlian(),
+                developer.getStatus().toString());
     }
 }
