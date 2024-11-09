@@ -80,7 +80,7 @@ public class ChangesController {
 
     @GetMapping("/all")
     public ResponseEntity<RestResponse> getAllDeveloper(){
-        List<ServerChangesResponse> data = service.ge();
+        List<ServerChangesResponse> data = service.getAll();
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
