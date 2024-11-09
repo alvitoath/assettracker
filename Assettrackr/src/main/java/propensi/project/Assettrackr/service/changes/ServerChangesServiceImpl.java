@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.ServerChanges;
+import propensi.project.Assettrackr.model.ServerChangesStatus;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
@@ -14,8 +15,6 @@ import propensi.project.Assettrackr.repository.ServerRepository;
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .tipePerbaikan(request.getTipePerbaikan())
                 .detailPerbaikan(request.getDetailPerbaikan())
                 .tanggalDibuat(new Date())
-                .status(request.getStatus())
+                .status(ServerChangesStatus.valueOf(request.getStatus()))
                 .build());
 
         server.getListServerChanges().add(response);
@@ -59,7 +58,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
             if (!request.getTipePerbaikan().isEmpty()) serverChanges.setTipePerbaikan(request.getTipePerbaikan());
             if (!request.getDetailPerbaikan().isEmpty()) serverChanges.setDetailPerbaikan(request.getDetailPerbaikan());
-            if (!request.getStatus().isEmpty()) serverChanges.setStatus(request.getStatus());
+            if (!request.getStatus().isEmpty()) serverChanges.setStatus(ServerChangesStatus.valueOf(request.getStatus()));
 
             ServerChanges response = repository.save(serverChanges);
             return mapper(response);
@@ -71,7 +70,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
     public String deleteServer(String id) throws RuntimeException, EntityNotFoundException {
         try {
-
+            //cek status
             ServerChanges serverChanges = repository.getReferenceById(id);
             repository.delete(serverChanges);
 
@@ -94,6 +93,6 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 serverChanges.getTipePerbaikan(),
                 serverChanges.getDetailPerbaikan(),
                 serverChanges.getTanggalDibuat().toString(),
-                serverChanges.getStatus());
+                serverChanges.getStatus().toString());
     }
 }

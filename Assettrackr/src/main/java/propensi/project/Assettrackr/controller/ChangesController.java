@@ -45,7 +45,7 @@ public class ChangesController {
     public ResponseEntity<RestResponse> updateServerChanges(@PathVariable("changesId")String id, @RequestBody UpdateChangesRequest request){
         try {
             ServerChangesResponse data = service.updateServerChanges(id, request);
-            RestResponse response = new RestResponse("Here is your data", data);
+            RestResponse response = new RestResponse("Permintaan berhasil diubah dan disimpan!", data);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
             RestResponse response = new RestResponse(e.getMessage(), null);

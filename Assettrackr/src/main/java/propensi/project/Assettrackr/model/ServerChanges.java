@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -48,7 +47,8 @@ public class ServerChanges {
     private Date tanggalSelesai;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status; // One process atau draft
+    private ServerChangesStatus status; // One process atau draft
 
 }
