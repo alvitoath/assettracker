@@ -3,11 +3,13 @@ package propensi.project.Assettrackr.service.changes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import propensi.project.Assettrackr.model.Developer;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.ServerChanges;
 import propensi.project.Assettrackr.model.ServerChangesStatus;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
+import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
@@ -89,10 +91,16 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         return serverChanges.stream().map(this::mapper).collect(Collectors.toList());
     }
 
+    @Override
+    public List<ServerChangesResponse> getAll() {
+        List<ServerChanges> response = repository.findAll();
+        return response.stream().map(this::mapper).collect(Collectors.toList());
+    }
+
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         return new ServerChangesResponse(
-                serverChanges.getId().toString(),
-                serverChanges.getServer().getId().toString(),
+                serverChanges.getId(),
+                serverChanges.getServer().getId(),
                 serverChanges.getTipePerbaikan(),
                 serverChanges.getDetailPerbaikan(),
                 serverChanges.getTanggalDibuat().toString(),
