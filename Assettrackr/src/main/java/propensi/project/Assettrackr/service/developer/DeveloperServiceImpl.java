@@ -50,6 +50,13 @@ public class DeveloperServiceImpl implements DeveloperService{
         return response.stream().map(this::mapper).collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean deleteDeveloper(String id) {
+        Developer developer = repository.getReferenceById(id);
+        repository.delete(developer);
+        return true;
+    }
+
     private DeveloperResponse mapper(Developer developer){
         return new DeveloperResponse(
                 developer.getId(),

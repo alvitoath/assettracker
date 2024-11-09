@@ -56,4 +56,22 @@ public class DeveloperController {
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{developerId}")
+    public ResponseEntity<RestResponse> deleteDeveloper(@PathVariable("developerId") String id){
+        try {
+            Boolean data = service.deleteDeveloper(id);
+
+            if (data) {
+                RestResponse response = new RestResponse("Successfuly delete data", null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+
+            RestResponse response = new RestResponse("Somewthing went wrong", null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            RestResponse response = new RestResponse("Id not found", null);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 }

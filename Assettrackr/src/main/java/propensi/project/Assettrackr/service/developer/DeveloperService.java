@@ -11,4 +11,5 @@ public interface DeveloperService {
     DeveloperResponse updateDeveloper(UpdateDeveloperRequest request, String id) throws Exception;
     DeveloperResponse getDetailDeveloper(String id) throws Exception;
     List<DeveloperResponse> getAllDeveloper();
+    Boolean deleteDeveloper(String id);
 }
