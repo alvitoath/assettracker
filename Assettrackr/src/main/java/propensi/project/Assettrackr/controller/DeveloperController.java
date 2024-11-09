@@ -11,6 +11,8 @@ import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.service.developer.DeveloperService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/developer")
 public class DeveloperController {
@@ -46,5 +48,12 @@ public class DeveloperController {
             RestResponse response = new RestResponse("Id not found", null);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<RestResponse> getAllDeveloper(){
+        List<DeveloperResponse> data = service .getAllDeveloper();
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

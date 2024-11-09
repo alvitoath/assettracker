@@ -10,6 +10,9 @@ import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.repository.DeveloperRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class DeveloperServiceImpl implements DeveloperService{
     @Autowired
@@ -39,6 +42,12 @@ public class DeveloperServiceImpl implements DeveloperService{
     public DeveloperResponse getDetailDeveloper(String id) throws Exception {
         Developer developer = repository.getReferenceById(id);
         return mapper(developer);
+    }
+
+    @Override
+    public List<DeveloperResponse> getAllDeveloper() {
+        List<Developer> response = repository.findAll();
+        return response.stream().map(this::mapper).collect(Collectors.toList());
     }
 
     private DeveloperResponse mapper(Developer developer){
