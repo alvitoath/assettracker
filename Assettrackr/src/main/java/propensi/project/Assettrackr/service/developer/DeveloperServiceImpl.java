@@ -2,9 +2,11 @@ package propensi.project.Assettrackr.service.developer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import propensi.project.Assettrackr.model.Developer;
 import propensi.project.Assettrackr.model.DeveloperStatus;
 import propensi.project.Assettrackr.model.dto.request.CreateDeveloperRequest;
+import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.repository.DeveloperRepository;
 
@@ -21,6 +23,16 @@ public class DeveloperServiceImpl implements DeveloperService{
                 .status(DeveloperStatus.Available).build();
 
         return mapper(developer);
+    }
+
+    @Override
+    public DeveloperResponse updateDeveloper(UpdateDeveloperRequest request, String id) throws Exception {
+        Developer developer = repository.getReferenceById(id);
+        if (!request.getKeahlian().isEmpty()) developer.setNama(request.getNama());
+        if (!request.getNama().isEmpty()) developer.setKeahlian(request.getKeahlian());
+        if (!request.getStatus().isEmpty()) developer.setStatus(DeveloperStatus.valueOf(request.getStatus()));
+        Developer response = repository.save(developer);
+        return mapper(response);
     }
 
     private DeveloperResponse mapper(Developer developer){

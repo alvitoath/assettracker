@@ -3,12 +3,11 @@ package propensi.project.Assettrackr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.dto.RestResponse;
 import propensi.project.Assettrackr.model.dto.request.CreateDeveloperRequest;
+import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.service.developer.DeveloperService;
 
@@ -23,5 +22,17 @@ public class DeveloperController {
         DeveloperResponse data = service.createDeveloper(request);
         RestResponse response = new RestResponse("Developer successfully created", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{developerId}")
+    public ResponseEntity<RestResponse> updateDeveloper(@RequestBody UpdateDeveloperRequest request, @PathVariable("developerId")String id){
+        try {
+            DeveloperResponse data = service.updateDeveloper(request, id);
+            RestResponse response = new RestResponse("Successfuly update data", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            RestResponse response = new RestResponse("Data is invalid", null);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 }
