@@ -18,4 +18,5 @@ public class ServerChangesResponse {
     private String status;
     private String tanggalSelesai;
     private String divisi;
+    private String solutionId;
 }

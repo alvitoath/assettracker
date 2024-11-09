@@ -129,6 +129,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .status(serverChanges.getStatus().toString())
                 .tanggalSelesai(serverChanges.getTanggalSelesai().toString())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
+                .solutionId(serverChanges.getSolution().getId())
                 .build();
     }
 }
