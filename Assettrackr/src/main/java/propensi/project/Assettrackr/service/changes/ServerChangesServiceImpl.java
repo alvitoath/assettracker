@@ -114,6 +114,12 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     @Override
+    public List<ServerChangesResponse> getServerChangesByDivisiName(String divisiName) {
+        List<ServerChanges> serverChanges = repository.findServerChangesByDivisiName(divisiName);
+        return serverChanges.stream().map(this::mapper).collect(Collectors.toList());
+    }
+
+    @Override
     public List<ServerChangesResponse> getAll() {
         List<ServerChanges> response = repository.findAll();
         return response.stream().map(this::mapper).collect(Collectors.toList());

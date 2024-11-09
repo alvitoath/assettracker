@@ -27,7 +27,6 @@ public class ChangesController {
             ServerChangesResponse response =  service.createServerChanges(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -76,6 +75,13 @@ public class ChangesController {
     @GetMapping("/divisi/{divisiId}")
     public ResponseEntity<RestResponse> getServerChangesByDivisi(@PathVariable("divisiId") String id){
         List<ServerChangesResponse> data = service.getServerChangesByDivisi(id);
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/divisi/name/{divisiName}")
+    public ResponseEntity<RestResponse> getServerChangesByDivisiName(@PathVariable("divisiName") String name){
+        List<ServerChangesResponse> data = service.getServerChangesByDivisiName(name);
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
