@@ -95,4 +95,13 @@ public class DivisiServiceImpl implements DivisiService{
         Divisi divisi = divisiOpt.get();
         return divisi.getListServer();
     }
+
+    @Override
+    public Divisi getDivisiById(String id) throws RuntimeException {
+        Optional<Divisi> divisiOpt = divisiRepository.findById(id);
+        if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
+
+        Divisi divisi = divisiOpt.get();
+        return divisi;
+    }
 }

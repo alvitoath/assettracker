@@ -15,5 +15,6 @@ public interface DivisiService {
     public Divisi updateDivisi(String id, CreateUpdateDivisiRequest request, MultipartFile image) throws RuntimeException;
     public List<Server> getServerByDivisi(String nama) throws RuntimeException;
     public List<Server> getServerByDivisiId(String id) throws RuntimeException;
+    public Divisi getDivisiById(String id) throws RuntimeException;
 }
 

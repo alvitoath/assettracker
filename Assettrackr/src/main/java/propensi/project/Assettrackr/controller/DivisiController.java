@@ -27,7 +27,7 @@ public class DivisiController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
     public ResponseEntity<?> createDivisi(@RequestParam("divisiData") String divisiDataJson, @RequestParam("image")MultipartFile image){
         try {
             CreateUpdateDivisiRequest request = objectMapper.readValue(divisiDataJson, CreateUpdateDivisiRequest.class);
@@ -55,7 +55,7 @@ public class DivisiController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(value = "/update/{id}", consumes = "multipart/form-data")
     public ResponseEntity<?> updateDivisi(@PathVariable("id")String id, @RequestParam("divisiData") String divisiDataJson, @RequestParam("image")MultipartFile image){
         try {
             CreateUpdateDivisiRequest request = objectMapper.readValue(divisiDataJson, CreateUpdateDivisiRequest.class);
@@ -71,6 +71,17 @@ public class DivisiController {
     public ResponseEntity<List<Server>> getServerByDivisiName(@PathVariable("nama")String nama){
         try {
             List<Server> response = service.getServerByDivisi(nama);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<Divisi> getDivisiById(@PathVariable("id")String id){
+        try {
+            Divisi response = service.getDivisiById(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
