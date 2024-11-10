@@ -62,6 +62,9 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/divisi/divisi/**")).hasAnyAuthority("Admin", "Operational", "Security", "Anggota")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/divisi/**")).hasAnyAuthority("Admin", "Operational")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/all")).hasAuthority("Admin")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/changes")).hasAnyAuthority("Anggota", "Security", "Operational")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/developer")).hasAnyAuthority( "Security", "Operational")
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/user/all")).hasAuthority("Admin")
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/user/login-active")).permitAll()
                 .anyRequest().authenticated();

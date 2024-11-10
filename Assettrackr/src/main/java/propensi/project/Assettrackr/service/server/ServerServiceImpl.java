@@ -4,15 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
+import propensi.project.Assettrackr.model.ServerChanges;
 import propensi.project.Assettrackr.model.Status;
-import propensi.project.Assettrackr.model.dto.CreateUpdateServerRequest;
-import propensi.project.Assettrackr.model.dto.GetServerResponse;
-import propensi.project.Assettrackr.model.dto.ServerDetailResponse;
-import propensi.project.Assettrackr.model.dto.ServerUpdateRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
+import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
+import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
+import propensi.project.Assettrackr.model.dto.request.ServerUpdateRequest;
 import propensi.project.Assettrackr.repository.DivisiRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,9 +29,7 @@ public class ServerServiceImpl implements ServerService{
     private DivisiRepository divisiRepository;
     @Override
     public Server createServer(CreateUpdateServerRequest request) throws RuntimeException {
-        for (Divisi divisi : divisiRepository.findAll()) {
-            System.out.println(divisi.getNama());
-        }
+
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
         if (divisiOpt.isEmpty()) {
             throw new RuntimeException("Divisi tidak tersedia");
@@ -55,6 +55,7 @@ public class ServerServiceImpl implements ServerService{
                 .versiBahasa(request.getVersiBahasa())
                 .framework(request.getFramework())
                 .versiFramework(request.getVersiFramework())
+                .listServerChanges(new ArrayList<>())
                 .build());
     }
     @Override
@@ -68,7 +69,7 @@ public class ServerServiceImpl implements ServerService{
         return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
     }
     @Override
-    public String deleteServer(Integer id) throws RuntimeException{
+    public String deleteServer(String id) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server tidak ditemukan");
 
@@ -78,7 +79,7 @@ public class ServerServiceImpl implements ServerService{
         return "Success";
     }
     @Override
-    public boolean updateServer(Integer id, ServerUpdateRequest request) throws RuntimeException{
+    public Boolean updateServer(String id, ServerUpdateRequest request) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();
@@ -90,12 +91,19 @@ public class ServerServiceImpl implements ServerService{
             server.setDivisi(divisiOpt.get());
         }
         if (!request.getIpAddress().isEmpty()) server.setIpAddress(request.getIpAddress());
+        if (!request.getStatus().isEmpty()) server.setStatus(Status.valueOf(request.getStatus()));
+        if (!request.getSistemOperasi().isEmpty()) server.setSistemOperasi(request.getSistemOperasi());
+        if (!request.getBahasaPemrograman().isEmpty()) server.setBahasaPemrograman(request.getBahasaPemrograman());
+        if (!request.getLokasi().isEmpty()) server.setLokasi(request.getLokasi());
+        if (!request.getVersiBahasa().isEmpty()) server.setVersiBahasa(request.getVersiBahasa());
+        if (!request.getFramework().isEmpty()) server.setFramework(request.getFramework());
+        if (!request.getVersiFramework().isEmpty()) server.setVersiFramework(request.getVersiFramework());
         repository.save(server);
         return true;
     }
 
     @Override
-    public ServerDetailResponse getServerDetail(Integer id) throws RuntimeException{
+    public ServerDetailResponse getServerDetail(String id) throws RuntimeException{
         Optional<Server> serverOpt = repository.findById(id);
         if (serverOpt.isEmpty()) throw new RuntimeException("Server is not found");
         Server server = serverOpt.get();

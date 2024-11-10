@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.CreateUpdateDivisiRequest;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
 import propensi.project.Assettrackr.service.divisi.DivisiService;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class DivisiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDivisi(@PathVariable("id") Integer id){
+    public ResponseEntity<String> deleteDivisi(@PathVariable("id") String id){
         try {
             String response = service.deleteDivisi(id);
             return ResponseEntity.ok(response);
@@ -44,7 +44,7 @@ public class DivisiController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateDivisi(@PathVariable("id")Integer id, @RequestBody CreateUpdateDivisiRequest request){
+    public ResponseEntity<?> updateDivisi(@PathVariable("id")String id, @RequestBody CreateUpdateDivisiRequest request){
         try {
             Divisi response = service.updateDivisi(id, request);
             if (response == null) return ResponseEntity.badRequest().body(null);
@@ -55,7 +55,7 @@ public class DivisiController {
     }
 
     @GetMapping("/divisi/{nama}")
-    public ResponseEntity<List<Server>> getServerByDivisi(@PathVariable("nama")String nama){
+    public ResponseEntity<List<Server>> getServerByDivisiName(@PathVariable("nama")String nama){
         try {
             List<Server> response = service.getServerByDivisi(nama);
             return ResponseEntity.ok(response);
@@ -66,7 +66,7 @@ public class DivisiController {
     }
 
     @GetMapping("/divisi/{id}")
-    public ResponseEntity<List<Server>> getServerByDivisi(@PathVariable("id")Integer id){
+    public ResponseEntity<List<Server>> getServerByDivisiId(@PathVariable("id")String id){
         try {
             List<Server> response = service.getServerByDivisiId(id);
             return ResponseEntity.ok(response);

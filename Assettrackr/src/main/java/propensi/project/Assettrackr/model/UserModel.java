@@ -24,7 +24,7 @@ public class UserModel {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private UUID id;
+    private String id;
 
     @NotNull
     @Size(max = 50)

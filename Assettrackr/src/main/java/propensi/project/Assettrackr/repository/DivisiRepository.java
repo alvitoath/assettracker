@@ -7,7 +7,7 @@ import propensi.project.Assettrackr.model.Divisi;
 import java.util.Optional;
 
 @Repository
-public interface DivisiRepository extends JpaRepository<Divisi, Integer> {
+public interface DivisiRepository extends JpaRepository<Divisi, String> {
 
     Optional<Divisi> findByNama(String nama);
 }

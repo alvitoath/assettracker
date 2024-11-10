@@ -2,7 +2,9 @@ package propensi.project.Assettrackr.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,9 +20,12 @@ import java.util.List;
 @Table(name = "server")
 public class Server {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private String id;
 
     @NotNull
     @Size(max = 50)
@@ -32,9 +37,8 @@ public class Server {
     @Column(name = "ip_address", nullable = false)
     private String ipAddress;
 
-
+    @NotNull
     @ManyToOne
-    @PrimaryKeyJoinColumn
     @JoinColumn(name = "divisi_id", nullable = false) // Foreign key column
     private Divisi divisi;
 
@@ -72,4 +76,10 @@ public class Server {
     @Size(max = 20)
     @Column(name = "versi_framework", nullable = false)
     private String versiFramework;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
+    private List<ServerChanges> listServerChanges;
+
+
 }

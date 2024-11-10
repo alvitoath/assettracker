@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import propensi.project.Assettrackr.model.Server;
 
 @Repository
-public interface ServerRepository extends JpaRepository<Server, Integer> {
-    long countByDivisiId(Integer divisiId);
+public interface ServerRepository extends JpaRepository<Server, String> {
+    long countByDivisiId(String divisiId);
 
 }

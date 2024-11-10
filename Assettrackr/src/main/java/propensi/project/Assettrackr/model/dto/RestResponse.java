@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateUpdateDivisiRequest {
-    private String nama;
-    private String keterangan;
+public class RestResponse {
+    private String message;
+    private Object data;
 }

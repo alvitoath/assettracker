@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Role;
 import propensi.project.Assettrackr.model.UserModel;
-import propensi.project.Assettrackr.model.dto.*;
+import propensi.project.Assettrackr.model.dto.request.CreateUserRequest;
+import propensi.project.Assettrackr.model.dto.request.LoginRequest;
+import propensi.project.Assettrackr.model.dto.request.UserUpdateRequest;
+import propensi.project.Assettrackr.model.dto.response.ListUserResponse;
+import propensi.project.Assettrackr.model.dto.response.UserResponse;
 import propensi.project.Assettrackr.repository.*;
 import propensi.project.Assettrackr.security.jwt.JwtUtils;
 
@@ -15,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,23 +39,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public String createUser(CreateUserRequest request) throws RuntimeException {
         if (userRepository.findByUsername(request.getUsername()).isPresent()){
-            System.out.println("username found");
             throw new RuntimeException("Username sudah terdaftar");
         } else if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            System.out.println("email found");
             throw new RuntimeException("Email sudah terdaftar");
         }
 
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
         if (divisiOpt.isEmpty()){
-            System.out.println("divisi not found");
             throw new RuntimeException("Divisi tidak tersedia");
         }
 
         Divisi divisi = divisiOpt.get();
 
         String password = randomPass();
-        userRepository.save(UserModel.builder()
+        UserModel userModel = userRepository.save(UserModel.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .nama(request.getNama())
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getDetailUser(String id) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
 
         if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
         UserModel user = userOpt.get();
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public boolean updateUser(String id, UserUpdateRequest request) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
         UserModel user = userOpt.get();
 
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public boolean deleteUser(String id) throws RuntimeException{
-        Optional<UserModel> userOpt = userRepository.findById(UUID.fromString(id));
+        Optional<UserModel> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) throw new RuntimeException("User tidak ditemukan");
         UserModel user = userOpt.get();
         userRepository.delete(user);

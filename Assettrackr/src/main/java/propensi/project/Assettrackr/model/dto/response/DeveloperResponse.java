@@ -1,4 +1,4 @@
-package propensi.project.Assettrackr.model.dto;
+package propensi.project.Assettrackr.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserResponse {
+public class DeveloperResponse {
     private String id;
-    private String username;
     private String nama;
-    private String email;
-    private String role;
-    private String divisi;
+    private String keahlian;
+    private String status;
 }
-

@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.dto.*;
+import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
+import propensi.project.Assettrackr.model.dto.request.ServerUpdateRequest;
+import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
+import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
 import propensi.project.Assettrackr.service.server.ServerService;
 
 import java.util.List;
@@ -37,7 +40,7 @@ public class ServerController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteServer(@PathVariable("id") Integer id){
+    public ResponseEntity<String> deleteServer(@PathVariable("id") String id){
         try {
             String response = service.deleteServer(id);
             return ResponseEntity.ok(response);
@@ -47,7 +50,7 @@ public class ServerController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateServer(@PathVariable("id") Integer id, @RequestBody ServerUpdateRequest request){
+    public ResponseEntity<String> updateServer(@PathVariable("id") String id, @RequestBody ServerUpdateRequest request){
         try {
             boolean result = service.updateServer(id, request);
             if (result) return ResponseEntity.ok("success");
@@ -58,7 +61,7 @@ public class ServerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ServerDetailResponse> detailSever(@PathVariable("id") Integer id){
+    public ResponseEntity<ServerDetailResponse> detailSever(@PathVariable("id") String id){
         try {
             ServerDetailResponse response= service.getServerDetail(id);
             return ResponseEntity.ok(response);

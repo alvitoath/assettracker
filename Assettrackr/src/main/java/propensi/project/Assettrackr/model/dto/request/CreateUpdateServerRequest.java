@@ -1,4 +1,4 @@
-package propensi.project.Assettrackr.model.dto;
+package propensi.project.Assettrackr.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ServerUpdateRequest {
+public class CreateUpdateServerRequest {
     private String nama;
     private String ipAddress;
     private String divisi;
