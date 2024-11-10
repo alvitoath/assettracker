@@ -24,6 +24,7 @@ public class DeveloperServiceImpl implements DeveloperService{
                 .nama(request.getNama())
                 .keahlian(request.getKeahlian())
                 .status(DeveloperStatus.Available).build();
+        repository.save(developer);
 
         return mapper(developer);
     }

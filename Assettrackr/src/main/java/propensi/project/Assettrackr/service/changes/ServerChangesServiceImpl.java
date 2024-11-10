@@ -76,7 +76,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
             ServerChanges response = repository.save(serverChanges);
 
-            if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim)){
+            if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim) && response.getSolution() == null){
                 ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
                         .status(SolutionStatus.Unsolved)
                         .serverChanges(response)
