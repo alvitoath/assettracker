@@ -1,8 +1,11 @@
 package propensi.project.Assettrackr.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
@@ -16,10 +19,19 @@ public class DivisiController {
 
     @Autowired
     private DivisiService service;
+
+    @Autowired
+    private final ObjectMapper objectMapper;
+
+    public DivisiController(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<?> createDivisi(@RequestBody CreateUpdateDivisiRequest request){
+    public ResponseEntity<?> createDivisi(@RequestParam("divisiData") String divisiDataJson, @RequestParam("image")MultipartFile image){
         try {
-            Divisi response = service.createDivisi(request);
+            CreateUpdateDivisiRequest request = objectMapper.readValue(divisiDataJson, CreateUpdateDivisiRequest.class);
+            Divisi response = service.createDivisi(request, image);
             if (response == null) return ResponseEntity.badRequest().body(null);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -44,9 +56,10 @@ public class DivisiController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateDivisi(@PathVariable("id")String id, @RequestBody CreateUpdateDivisiRequest request){
+    public ResponseEntity<?> updateDivisi(@PathVariable("id")String id, @RequestParam("divisiData") String divisiDataJson, @RequestParam("image")MultipartFile image){
         try {
-            Divisi response = service.updateDivisi(id, request);
+            CreateUpdateDivisiRequest request = objectMapper.readValue(divisiDataJson, CreateUpdateDivisiRequest.class);
+            Divisi response = service.updateDivisi(id, request, image);
             if (response == null) return ResponseEntity.badRequest().body(null);
             return ResponseEntity.ok(response);
         } catch (Exception e){

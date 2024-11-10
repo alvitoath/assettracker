@@ -2,6 +2,7 @@ package propensi.project.Assettrackr.service.divisi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import propensi.project.Assettrackr.model.Divisi;
 import propensi.project.Assettrackr.model.Server;
 import propensi.project.Assettrackr.model.dto.request.CreateUpdateDivisiRequest;
@@ -23,14 +24,20 @@ public class DivisiServiceImpl implements DivisiService{
     @Autowired
     private ServerRepository serverRepository;
     @Override
-    public Divisi createDivisi(CreateUpdateDivisiRequest request) throws RuntimeException{
+    public Divisi createDivisi(CreateUpdateDivisiRequest request, MultipartFile image) throws RuntimeException{
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getNama());
         if (divisiOpt.isPresent()) throw new RuntimeException("Divisi sudah tersedia");
-
-        return divisiRepository.save(Divisi.builder()
+        Divisi divisi = Divisi.builder()
                 .nama(request.getNama())
                 .keterangan(request.getKeterangan())
-                .build());
+                .build();
+        try {
+            if (!image.isEmpty()) divisi.setFoto(image.getBytes());
+        } catch (Exception e){
+            throw new RuntimeException("Foto tidak dapat diupload");
+        }
+
+        return divisiRepository.save(divisi);
     }
     @Override
     public List<Divisi> getAllDivisi(){
@@ -55,7 +62,7 @@ public class DivisiServiceImpl implements DivisiService{
     }
 
     @Override
-    public Divisi updateDivisi(String id, CreateUpdateDivisiRequest request) throws RuntimeException{
+    public Divisi updateDivisi(String id, CreateUpdateDivisiRequest request, MultipartFile image) throws RuntimeException{
         Optional<Divisi> divisiOpt = divisiRepository.findById(id);
         if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak ditemukan");
         Optional<Divisi> checkSameNameDivisi = divisiRepository.findByNama(request.getNama());
@@ -64,6 +71,11 @@ public class DivisiServiceImpl implements DivisiService{
         if (!request.getNama().isEmpty()) divisi.setNama(request.getNama());
         if (!request.getKeterangan().isEmpty()) divisi.setKeterangan(request.getKeterangan());
 
+        try {
+            if (!image.isEmpty()) divisi.setFoto(image.getBytes());
+        } catch (Exception e){
+            throw new RuntimeException("Foto tidak dapat diupload");
+        }
         return divisiRepository.save(divisi);
     }
     @Override
