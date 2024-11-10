@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.ChangesSolution;
 import propensi.project.Assettrackr.model.ServerChanges;
+import propensi.project.Assettrackr.model.ServerChangesStatus;
 import propensi.project.Assettrackr.model.SolutionStatus;
 import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.response.ChangesSolutionResponse;
@@ -61,7 +62,22 @@ public class SolutionServiceImpl implements SolutionService{
     public Boolean deleteSolution(String id) throws RuntimeException, EntityNotFoundException {
         try {
             ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
+            if (changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
+
+            ServerChanges serverChanges = changesSolution.getServerChanges();
+            serverChanges.setTanggalSelesai(null);
+            serverChanges.setStatus(ServerChangesStatus.Dikirim);
+            serverChanges.setSolution(null);
+            serverChangesRepository.save(serverChanges);
             solutionRepository.delete(changesSolution);
+
+            ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
+                    .status(SolutionStatus.Unsolved)
+                    .serverChanges(serverChanges)
+                    .build());
+            serverChanges.setSolution(solution);
+            serverChangesRepository.save(serverChanges);
+
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
