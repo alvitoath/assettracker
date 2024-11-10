@@ -4,6 +4,7 @@ package propensi.project.Assettrackr.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,6 +44,7 @@ public class Divisi {
     private List<UserModel> listUser;
 
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(name = "foto")
     private byte[] foto;
 }
