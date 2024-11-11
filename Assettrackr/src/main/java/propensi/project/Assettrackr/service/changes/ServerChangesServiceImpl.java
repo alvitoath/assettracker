@@ -95,9 +95,19 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     public Boolean deleteServer(String id) throws RuntimeException, EntityNotFoundException {
         try {
             ServerChanges serverChanges = repository.getReferenceById(id);
-            if (serverChanges.getStatus().equals(ServerChangesStatus.Ditolak) || serverChanges.getStatus().equals(ServerChangesStatus.Draft)){
+            if (serverChanges.getStatus().equals(ServerChangesStatus.Draft)){
                 repository.delete(serverChanges);
                 return true;
+            }
+
+            if (serverChanges.getStatus().equals(ServerChangesStatus.Ditolak)){
+                ChangesSolution solution = serverChanges.getSolution();
+                serverChanges.setSolution(null);
+
+                repository.save(serverChanges);
+
+                solutionRepository.delete(solution);
+                repository.delete(serverChanges);
             }
             return false;
         } catch (Exception e) {
