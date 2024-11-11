@@ -49,6 +49,12 @@ public class SolutionServiceImpl implements SolutionService{
             serverChangesRepository.save(serverChanges);
         }
 
+        if (SolutionStatus.valueOf(request.getStatus()).equals(SolutionStatus.Dikirim)){
+            ServerChanges serverChanges = changesSolution.getServerChanges();
+            serverChanges.setStatus(ServerChangesStatus.Diproses);
+            serverChangesRepository.save(serverChanges);
+        }
+
         return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
     }
 
@@ -62,7 +68,7 @@ public class SolutionServiceImpl implements SolutionService{
     public Boolean deleteSolution(String id) throws RuntimeException, EntityNotFoundException {
         try {
             ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
-            if (changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
+            if (changesSolution.getStatus().equals(SolutionStatus.Dikirim) || changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
 
             ServerChanges serverChanges = changesSolution.getServerChanges();
             serverChanges.setTanggalSelesai(null);
