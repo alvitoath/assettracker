@@ -18,4 +18,6 @@ public interface ServerChangesService {
     public List<ServerChangesResponse> getServerChangesByDivisiName(String divisiName);
     List<ServerChangesResponse> getAll();
 
+    public Boolean rejectServerChanges(String id);
+
 }

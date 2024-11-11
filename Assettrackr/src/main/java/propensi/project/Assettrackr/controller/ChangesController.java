@@ -92,4 +92,20 @@ public class ChangesController {
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/reject/{changesId}")
+    public ResponseEntity<RestResponse> rejectServerChanges(@PathVariable("changesId") String changesId){
+        try {
+            Boolean data = service.rejectServerChanges(changesId);
+            if (data){
+                RestResponse response = new RestResponse("Perubahan berhasil ditolak", null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            RestResponse response = new RestResponse("Perubahan tidak dapat ditolak", null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 }

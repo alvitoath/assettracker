@@ -125,6 +125,16 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         return response.stream().map(this::mapper).collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean rejectServerChanges(String id) {
+        ServerChanges serverChanges = repository.getReferenceById(id);
+        if (!serverChanges.getStatus().equals(ServerChangesStatus.Dikirim)) throw new RuntimeException("Perubahan tidak dapat ditolak");
+
+        serverChanges.setStatus(ServerChangesStatus.Ditolak);
+        repository.save(serverChanges);
+        return true;
+    }
+
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
