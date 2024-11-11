@@ -108,6 +108,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
                 solutionRepository.delete(solution);
                 repository.delete(serverChanges);
+                return true;
             }
             return false;
         } catch (Exception e) {
