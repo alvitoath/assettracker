@@ -69,19 +69,13 @@ public class SolutionServiceImpl implements SolutionService{
         try {
             ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
             if (changesSolution.getStatus().equals(SolutionStatus.Dikirim) || changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
+            changesSolution.setSolution(null);
+            changesSolution.setStatus(SolutionStatus.Unsolved);
 
             ServerChanges serverChanges = changesSolution.getServerChanges();
             serverChanges.setTanggalSelesai(null);
             serverChanges.setStatus(ServerChangesStatus.Dikirim);
-            serverChanges.setSolution(null);
-            serverChangesRepository.save(serverChanges);
-            solutionRepository.delete(changesSolution);
-
-            ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
-                    .status(SolutionStatus.Unsolved)
-                    .serverChanges(serverChanges)
-                    .build());
-            serverChanges.setSolution(solution);
+            solutionRepository.save(changesSolution);
             serverChangesRepository.save(serverChanges);
 
             return true;
