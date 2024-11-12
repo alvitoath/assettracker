@@ -161,6 +161,8 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             response.setSolutionId(serverChanges.getSolution().getId());
             if (serverChanges.getStatus().toString().equals("Ditolak")) {
                 response.setSolutionStatus("Ditolak");
+            } else if (serverChanges.getStatus().toString().equals("Draft")) {
+                response.setSolutionStatus("Unsolved");
             } else {
                 response.setSolutionStatus(serverChanges.getSolution().getStatus().toString());
             }
