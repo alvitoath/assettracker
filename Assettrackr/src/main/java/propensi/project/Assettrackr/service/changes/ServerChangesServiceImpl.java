@@ -157,7 +157,10 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .build();
 
         if (serverChanges.getTanggalSelesai() != null) response.setTanggalSelesai(serverChanges.getTanggalSelesai().toString());
-        if (serverChanges.getSolution() != null) response.setSolutionId(serverChanges.getSolution().getId());
+        if (serverChanges.getSolution() != null) {
+            response.setSolutionId(serverChanges.getSolution().getId());
+            response.setSolutionStatus(serverChanges.getSolution().getStatus().toString());
+        }
         return response;
     }
 }
