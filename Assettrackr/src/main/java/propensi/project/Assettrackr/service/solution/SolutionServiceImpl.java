@@ -42,14 +42,7 @@ public class SolutionServiceImpl implements SolutionService{
         if (!request.getStatus().isEmpty()) changesSolution.setStatus(SolutionStatus.valueOf(request.getStatus()));
         solutionRepository.save(changesSolution);
 
-        //TODO: fix selesai jadi kalo udah selesai dari developer
         if (SolutionStatus.valueOf(request.getStatus()).equals(SolutionStatus.Solved)){
-            ServerChanges serverChanges = changesSolution.getServerChanges();
-//            serverChanges.setTanggalSelesai(new Date());
-            serverChangesRepository.save(serverChanges);
-        }
-
-        if (SolutionStatus.valueOf(request.getStatus()).equals(SolutionStatus.Dikirim)){
             ServerChanges serverChanges = changesSolution.getServerChanges();
             serverChanges.setStatus(ServerChangesStatus.Diproses);
             serverChangesRepository.save(serverChanges);
@@ -68,7 +61,7 @@ public class SolutionServiceImpl implements SolutionService{
     public Boolean deleteSolution(String id) throws RuntimeException, EntityNotFoundException {
         try {
             ChangesSolution changesSolution = solutionRepository.getReferenceById(id);
-            if (changesSolution.getStatus().equals(SolutionStatus.Dikirim) || changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
+            if (changesSolution.getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Solution tidak dapat dihapus");
             changesSolution.setSolution(null);
             changesSolution.setStatus(SolutionStatus.Unsolved);
 
