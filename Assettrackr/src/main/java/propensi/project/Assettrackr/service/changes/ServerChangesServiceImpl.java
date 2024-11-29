@@ -8,6 +8,7 @@ import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
+import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
@@ -143,7 +144,11 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         repository.save(serverChanges);
         return true;
     }
-
+    @Override
+    public List<FinishedChangesResponse> getAllFinishByDivisiId(String id){
+        List<ServerChanges> response = repository.findserverChangesFinishedByDivisiId(id);
+        return response.stream().map(this::finishedMapper).collect(Collectors.toList());
+    }
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
@@ -168,5 +173,22 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             }
         }
         return response;
+    }
+
+    private FinishedChangesResponse finishedMapper(ServerChanges serverChanges){
+        return FinishedChangesResponse.builder()
+                .id(serverChanges.getId())
+                .serverId(serverChanges.getServer().getId())
+                .serverName(serverChanges.getServer().getNama())
+                .tipePerbaikan(serverChanges.getTipePerbaikan())
+                .detailPerbaikan(serverChanges.getDetailPerbaikan())
+                .tanggalDibuat(String.valueOf(serverChanges.getTanggalDibuat()))
+                .tanggalSelesai(String.valueOf(serverChanges.getTanggalSelesai()))
+                .status(serverChanges.getStatus().toString())
+                .divisi(serverChanges.getServer().getDivisi().getNama())
+                .solutionId(serverChanges.getSolution().getId())
+                .solution(serverChanges.getSolution().getSolution())
+                .solutionStatus(serverChanges.getSolution().getStatus().toString())
+                .build();
     }
 }

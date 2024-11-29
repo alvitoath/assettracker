@@ -9,6 +9,7 @@ import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
+import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
@@ -75,6 +76,13 @@ public class ChangesController {
     @GetMapping("/divisi/{divisiId}")
     public ResponseEntity<RestResponse> getServerChangesByDivisi(@PathVariable("divisiId") String id){
         List<ServerChangesResponse> data = service.getServerChangesByDivisi(id);
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/finish/{divisiId}")
+    public ResponseEntity<RestResponse> getFinishedChangesByDivisiId(@PathVariable("divisiId") String id){
+        List<FinishedChangesResponse> data = service.getAllFinishByDivisiId(id);
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
