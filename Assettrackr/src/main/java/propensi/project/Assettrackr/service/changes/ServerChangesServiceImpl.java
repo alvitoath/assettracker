@@ -44,7 +44,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         server.getListServerChanges().add(response);
         serverRepository.save(server);
 
-        if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim)){
+        if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Unsolved)){
             ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
                     .status(SolutionStatus.Unsolved)
                     .serverChanges(response)
@@ -76,7 +76,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
             ServerChanges response = repository.save(serverChanges);
 
-            if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Dikirim) && response.getSolution() == null){
+            if (ServerChangesStatus.valueOf(request.getStatus()).equals(ServerChangesStatus.Unsolved) && response.getSolution() == null){
                 ChangesSolution solution = solutionRepository.save(ChangesSolution.builder()
                         .status(SolutionStatus.Unsolved)
                         .serverChanges(response)
@@ -137,7 +137,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     @Override
     public Boolean rejectServerChanges(String id) {
         ServerChanges serverChanges = repository.getReferenceById(id);
-        if (!serverChanges.getStatus().equals(ServerChangesStatus.Dikirim)) throw new RuntimeException("Perubahan tidak dapat ditolak");
+        if (serverChanges.getSolution().getStatus() != null && serverChanges.getSolution().getStatus().equals(SolutionStatus.Solved)) throw new RuntimeException("Perubahan tidak dapat ditolak");
 
         serverChanges.setStatus(ServerChangesStatus.Ditolak);
         repository.save(serverChanges);

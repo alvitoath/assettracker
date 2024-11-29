@@ -1,5 +1,5 @@
 package propensi.project.Assettrackr.model;
 
 public enum ServerChangesStatus {
-    Draft, Selesai, Ditolak, Diproses, Dikirim
+    Draft, Solved, Ditolak, Unsolved
 }

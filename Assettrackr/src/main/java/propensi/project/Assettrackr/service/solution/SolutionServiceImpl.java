@@ -42,12 +42,6 @@ public class SolutionServiceImpl implements SolutionService{
         if (!request.getStatus().isEmpty()) changesSolution.setStatus(SolutionStatus.valueOf(request.getStatus()));
         solutionRepository.save(changesSolution);
 
-        if (SolutionStatus.valueOf(request.getStatus()).equals(SolutionStatus.Solved)){
-            ServerChanges serverChanges = changesSolution.getServerChanges();
-            serverChanges.setStatus(ServerChangesStatus.Diproses);
-            serverChangesRepository.save(serverChanges);
-        }
-
         return new ChangesSolutionResponse(changesSolution.getId(), changesSolution.getSolution(), changesSolution.getStatus().toString());
     }
 
@@ -65,11 +59,7 @@ public class SolutionServiceImpl implements SolutionService{
             changesSolution.setSolution(null);
             changesSolution.setStatus(SolutionStatus.Unsolved);
 
-            ServerChanges serverChanges = changesSolution.getServerChanges();
-            serverChanges.setTanggalSelesai(null);
-            serverChanges.setStatus(ServerChangesStatus.Dikirim);
             solutionRepository.save(changesSolution);
-            serverChangesRepository.save(serverChanges);
 
             return true;
         } catch (Exception e) {
