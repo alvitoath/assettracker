@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -29,5 +31,6 @@ public class Developer {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private DeveloperStatus status;
-
+    @OneToMany(mappedBy = "developer", fetch = FetchType.LAZY)
+    private List<ServerChanges> serverChanges;
 }

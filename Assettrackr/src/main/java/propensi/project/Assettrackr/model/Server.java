@@ -81,5 +81,4 @@ public class Server {
     @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
     private List<ServerChanges> listServerChanges;
 
-
 }

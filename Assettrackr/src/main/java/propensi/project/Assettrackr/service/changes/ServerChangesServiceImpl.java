@@ -10,6 +10,7 @@ import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
+import propensi.project.Assettrackr.repository.DeveloperRepository;
 import propensi.project.Assettrackr.repository.ServerChangesRepository;
 import propensi.project.Assettrackr.repository.ServerRepository;
 import propensi.project.Assettrackr.repository.SolutionRepository;
@@ -29,6 +30,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
     @Autowired
     private SolutionRepository solutionRepository;
+
+    @Autowired
+    private DeveloperRepository developerRepository;
 
     @Override
     public ServerChangesResponse createServerChanges(CreateChangesRequest request) throws Exception{
@@ -154,6 +158,19 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         List<ServerChanges> response = repository.findFinishedChangesSolution();
         return response.stream().map(this::finishedMapper).collect(Collectors.toList());
     }
+
+    public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException{
+        ServerChanges serverChanges = repository.getReferenceById(changesId);
+        Developer developer = developerRepository.getReferenceById(developerId);
+
+        if (serverChanges.getSolution().getStatus()!= SolutionStatus.Solved) throw new RuntimeException("Solusi belum dibuat");
+        if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer sedang tidak tersedia");
+
+        developer.setStatus(DeveloperStatus.Unavailable);
+        serverChanges.setDeveloper(developer);
+        return finishedMapper(repository.save(serverChanges));
+
+    }
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
@@ -181,7 +198,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     private FinishedChangesResponse finishedMapper(ServerChanges serverChanges){
-        return FinishedChangesResponse.builder()
+        FinishedChangesResponse response = FinishedChangesResponse.builder()
                 .id(serverChanges.getId())
                 .serverId(serverChanges.getServer().getId())
                 .serverName(serverChanges.getServer().getNama())
@@ -193,7 +210,13 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .divisi(serverChanges.getServer().getDivisi().getNama())
                 .solutionId(serverChanges.getSolution().getId())
                 .solution(serverChanges.getSolution().getSolution())
-                .solutionStatus(serverChanges.getSolution().getStatus().toString())
-                .build();
+                .solutionStatus(serverChanges.getSolution().getStatus().toString()).build();
+
+        if (serverChanges.getDeveloper() != null){
+            response.setDeveloperId(serverChanges.getDeveloper().getId());
+            response.setDeveloperName(serverChanges.getDeveloper().getNama());
+            response.setDeveloperStatus(serverChanges.getDeveloper().getStatus().toString());
+        }
+        return response;
     }
 }

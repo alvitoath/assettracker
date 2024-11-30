@@ -22,4 +22,7 @@ public class FinishedChangesResponse {
     private String solutionId;
     private String solution;
     private String solutionStatus;
+    private String developerId;
+    private String developerName;
+    private String developerStatus;
 }

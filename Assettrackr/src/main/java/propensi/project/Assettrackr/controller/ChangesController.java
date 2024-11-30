@@ -13,6 +13,7 @@ import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -121,6 +122,21 @@ public class ChangesController {
         } catch (Exception e){
             RestResponse response = new RestResponse(e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/assign/{serverChangesId}/{developerId}")
+    public ResponseEntity<RestResponse> assignDeveloper(@PathVariable("serverChangesId")String changesId, @PathVariable("developerId")String developerId){
+        try {
+            FinishedChangesResponse data = service.assingDeveloper(changesId, developerId);
+            RestResponse response = new RestResponse("Here is your data!", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 }

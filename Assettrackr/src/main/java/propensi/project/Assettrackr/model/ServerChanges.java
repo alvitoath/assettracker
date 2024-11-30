@@ -53,4 +53,8 @@ public class ServerChanges {
     @OneToOne(mappedBy = "serverChanges")
     private ChangesSolution solution;
 
+    @ManyToOne
+    @JoinColumn(name = "developer_id")
+    private Developer developer;
+
 }

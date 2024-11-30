@@ -6,6 +6,7 @@ import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 public interface ServerChangesService {
@@ -20,5 +21,6 @@ public interface ServerChangesService {
     public Boolean rejectServerChanges(String id);
     public List<FinishedChangesResponse> getAllFinishByDivisiId(String id);
     public List<FinishedChangesResponse> getAllSolvedSolution();
+    public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException;
 
 }
