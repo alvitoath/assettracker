@@ -87,6 +87,13 @@ public class ChangesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/operational")
+    public ResponseEntity<RestResponse> getServerChangeOperational(){
+        List<FinishedChangesResponse> data = service.getAllSolvedSolution();
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/divisi/name/{divisiName}")
     public ResponseEntity<RestResponse> getServerChangesByDivisiName(@PathVariable("divisiName") String name){
         List<ServerChangesResponse> data = service.getServerChangesByDivisiName(name);

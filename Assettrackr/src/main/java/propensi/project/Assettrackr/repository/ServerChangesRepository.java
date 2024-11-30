@@ -15,4 +15,7 @@ public interface ServerChangesRepository extends JpaRepository<ServerChanges, St
 
     @Query(value = "SELECT * FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = :divisiId AND sc.status = 'Solved'", nativeQuery = true)
     List<ServerChanges> findserverChangesFinishedByDivisiId(String divisiId);
+
+    @Query(value = "SELECT * FROM server_changes sc, changes_solution cs WHERE sc.id = cs.server_changes_id AND cs.status = 'Solved'", nativeQuery = true)
+    List<ServerChanges> findFinishedChangesSolution();
 }

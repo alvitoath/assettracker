@@ -149,6 +149,11 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         List<ServerChanges> response = repository.findserverChangesFinishedByDivisiId(id);
         return response.stream().map(this::finishedMapper).collect(Collectors.toList());
     }
+    @Override
+    public List<FinishedChangesResponse> getAllSolvedSolution(){
+        List<ServerChanges> response = repository.findFinishedChangesSolution();
+        return response.stream().map(this::finishedMapper).collect(Collectors.toList());
+    }
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
