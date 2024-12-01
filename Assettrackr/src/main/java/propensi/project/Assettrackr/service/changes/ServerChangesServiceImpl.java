@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 import propensi.project.Assettrackr.model.*;
 import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.request.ServerChangesDeveloperUpdateRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
@@ -170,6 +171,22 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         serverChanges.setDeveloper(developer);
         return finishedMapper(repository.save(serverChanges));
 
+    }
+
+    public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException{
+        ServerChanges serverChanges = repository.getReferenceById(changesId);
+        if (serverChanges.getDeveloper() == null) throw new RuntimeException("Belum ter-assign developer");
+
+        Developer developerNew = developerRepository.getReferenceById(request.getDeveloperId());
+        if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
+
+        Developer developerOld = serverChanges.getDeveloper();
+        developerNew.setStatus(DeveloperStatus.Unavailable);
+        developerOld.setStatus(DeveloperStatus.Available);
+        serverChanges.setDeveloper(developerNew);
+        developerRepository.save(developerOld);
+        developerRepository.save(developerNew);
+        return finishedMapper(repository.save(serverChanges));
     }
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()

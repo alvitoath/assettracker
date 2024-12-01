@@ -2,6 +2,7 @@ package propensi.project.Assettrackr.service.changes;
 
 import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.request.ServerChangesDeveloperUpdateRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
@@ -22,5 +23,6 @@ public interface ServerChangesService {
     public List<FinishedChangesResponse> getAllFinishByDivisiId(String id);
     public List<FinishedChangesResponse> getAllSolvedSolution();
     public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException;
+    public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException;
 
 }

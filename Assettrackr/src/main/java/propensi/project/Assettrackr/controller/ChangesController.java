@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.dto.RestResponse;
 import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
 import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
+import propensi.project.Assettrackr.model.dto.request.ServerChangesDeveloperUpdateRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
@@ -137,6 +138,18 @@ public class ChangesController {
         } catch (RuntimeException e){
             RestResponse response = new RestResponse(e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/developer/update/{serverChangesId}")
+    public ResponseEntity<RestResponse> updateDeveloper(@PathVariable("serverChangesId")String serverChangeId, @RequestBody ServerChangesDeveloperUpdateRequest request){
+        try {
+            FinishedChangesResponse data = service.updateDeveloper(serverChangeId, request);
+            RestResponse response = new RestResponse("Permintaan berhasil diubah dan disimpan!", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }
