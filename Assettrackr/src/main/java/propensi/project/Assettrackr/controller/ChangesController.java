@@ -152,4 +152,16 @@ public class ChangesController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/finish/{changesId}")
+    public ResponseEntity<RestResponse> finishChanges(@PathVariable("changesId")String changesId){
+        try {
+            FinishedChangesResponse data = service.finishChanges(changesId);
+            RestResponse response = new RestResponse("Permintaan berhasil diubah dan disimpan!", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

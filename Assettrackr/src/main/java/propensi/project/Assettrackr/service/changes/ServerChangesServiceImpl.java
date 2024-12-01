@@ -188,6 +188,18 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         developerRepository.save(developerNew);
         return finishedMapper(repository.save(serverChanges));
     }
+
+    public FinishedChangesResponse finishChanges(String changesId) throws RuntimeException{
+        ServerChanges serverChanges = repository.getReferenceById(changesId);
+        if (serverChanges.getStatus().equals(ServerChangesStatus.Unsolved) && serverChanges.getSolution() != null && serverChanges.getSolution().getStatus().equals(SolutionStatus.Solved) && serverChanges.getDeveloper() != null){
+            Developer developer = serverChanges.getDeveloper();
+            developer.setStatus(DeveloperStatus.Available);
+            developerRepository.save(developer);
+            serverChanges.setStatus(ServerChangesStatus.Solved);
+            return finishedMapper(repository.save(serverChanges));
+        }
+        throw new RuntimeException("Terdapat kesalahan");
+    }
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
