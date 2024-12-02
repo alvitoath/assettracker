@@ -1,16 +1,14 @@
 package propensi.project.Assettrackr.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import propensi.project.Assettrackr.model.dto.RestResponse;
-import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
-import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
-import propensi.project.Assettrackr.model.dto.request.ServerChangesDeveloperUpdateRequest;
-import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
-import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
+import propensi.project.Assettrackr.model.dto.request.*;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
+import propensi.project.Assettrackr.model.dto.response.ChartResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
 
@@ -25,9 +23,16 @@ public class ChangesController {
     private ServerChangesService service;
 
     @PostMapping("/create")
-    public ResponseEntity<ServerChangesResponse> createServerChanges(@RequestBody CreateChangesRequest request){
+    public ResponseEntity<ServerChangesResponse> createServerChanges(@RequestBody CreateChangesRequest request, HttpServletRequest servletRequest){
         try {
-            ServerChangesResponse response =  service.createServerChanges(request);
+            String headerAuth = servletRequest.getHeader("Authorization");
+            String token;
+            if (headerAuth.startsWith("Bearer")){
+                token = headerAuth.substring(7);
+            } else {
+                token = headerAuth;
+            }
+            ServerChangesResponse response =  service.createServerChanges(request, token);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
@@ -163,5 +168,19 @@ public class ChangesController {
             RestResponse response = new RestResponse(e.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/summary/day")
+    public ResponseEntity<RestResponse> getDailySummary(@RequestBody SummaryRequest request){
+        ChartResponse data = service.getLineGraphDailySummary(request);
+        RestResponse response = new RestResponse("Here is your data!", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/summary/month")
+    public ResponseEntity<RestResponse> getMonthlySummary(@RequestBody SummaryRequest request){
+        ChartResponse data = service.getLineGraphMonthlySummary(request);
+        RestResponse response = new RestResponse("Here is your data!", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

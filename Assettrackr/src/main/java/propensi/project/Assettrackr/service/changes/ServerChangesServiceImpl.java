@@ -2,23 +2,22 @@ package propensi.project.Assettrackr.service.changes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import propensi.project.Assettrackr.model.*;
-import propensi.project.Assettrackr.model.dto.request.ChangesSolutionRequest;
-import propensi.project.Assettrackr.model.dto.request.CreateChangesRequest;
-import propensi.project.Assettrackr.model.dto.request.ServerChangesDeveloperUpdateRequest;
-import propensi.project.Assettrackr.model.dto.request.UpdateChangesRequest;
-import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
+import propensi.project.Assettrackr.model.dto.request.*;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
+import propensi.project.Assettrackr.model.dto.response.ChartResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
-import propensi.project.Assettrackr.repository.DeveloperRepository;
-import propensi.project.Assettrackr.repository.ServerChangesRepository;
-import propensi.project.Assettrackr.repository.ServerRepository;
-import propensi.project.Assettrackr.repository.SolutionRepository;
+import propensi.project.Assettrackr.model.projection.LineChartView;
+import propensi.project.Assettrackr.repository.*;
+import propensi.project.Assettrackr.security.jwt.JwtUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,8 +34,18 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     @Autowired
     private DeveloperRepository developerRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Override
-    public ServerChangesResponse createServerChanges(CreateChangesRequest request) throws Exception{
+    public ServerChangesResponse createServerChanges(CreateChangesRequest request, String token) throws Exception{
+        String username = jwtUtils.getUserNameFromJwtToken(token);
+        Optional<UserModel> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
+        UserModel user = userOpt.get();
         Server server = serverRepository.getReferenceById(request.getServerId());
         ServerChanges response = repository.save(ServerChanges.builder()
                 .server(server)
@@ -44,6 +53,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .detailPerbaikan(request.getDetailPerbaikan())
                 .tanggalDibuat(new Date())
                 .status(ServerChangesStatus.valueOf(request.getStatus()))
+                .anggota(user)
                 .build());
 
 
@@ -169,8 +179,56 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
         developer.setStatus(DeveloperStatus.Unavailable);
         serverChanges.setDeveloper(developer);
+        Server server = serverChanges.getServer();
+        server.setStatus(Status.MAINTENANCE);
         return finishedMapper(repository.save(serverChanges));
 
+    }
+
+    public ChartResponse getLineGraphDailySummary(SummaryRequest request){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);
+        LocalDate dateEnd = LocalDate.parse(request.getEnd(), formatter);
+        Long daysBetween = ChronoUnit.DAYS.between(dateStart, dateEnd);
+
+        Long[] values = new Long[Math.toIntExact(daysBetween) + 1];
+        String[] labels = new String[Math.toIntExact(daysBetween) + 1];
+
+        for (int i = 0; i < labels.length; i++) {
+            labels[i] = dateStart.plusDays(i).format(formatter);
+        }
+
+        List<LineChartView> data = repository.lineChartSummaryDay(request.getStart(), request.getEnd());
+        for (int i = 0; i < data.size(); i++) {
+            LocalDate dataDate = LocalDate.parse(data.get(i).getTime(), formatter);
+            Long daysBetweenData = ChronoUnit.DAYS.between(dateStart, dataDate);
+            values[Math.toIntExact(daysBetweenData)] = data.get(i).getTotalChanges();
+        }
+        return new ChartResponse(labels, values);
+    }
+
+    public ChartResponse getLineGraphMonthlySummary(SummaryRequest request){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);
+        LocalDate dateEnd = LocalDate.parse(request.getEnd(), formatter);
+        Long daysBetween = ChronoUnit.MONTHS.between(dateStart.withDayOfMonth(1), dateEnd.withDayOfMonth(1));
+
+        Long[] values = new Long[Math.toIntExact(daysBetween) + 1];
+        String[] labels = new String[Math.toIntExact(daysBetween) + 1];
+
+        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM");
+
+        for (int i = 0; i < labels.length; i++) {
+            labels[i] = dateStart.plusMonths(i).format(monthFormatter);
+        }
+
+        List<LineChartView> data = repository.lineChartSummaryMonth(request.getStart(), request.getEnd());
+        for (int i = 0; i < data.size(); i++) {
+            LocalDate dataDate = LocalDate.parse(data.get(i).getTime().substring(0, 10), formatter);
+            Long daysBetweenData = ChronoUnit.MONTHS.between(dateStart.withDayOfMonth(1), dataDate.withDayOfMonth(1));
+            values[Math.toIntExact(daysBetweenData)] = data.get(i).getTotalChanges();
+        }
+        return new ChartResponse(labels, values);
     }
 
     public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException{
@@ -199,7 +257,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             return finishedMapper(repository.save(serverChanges));
         }
         throw new RuntimeException("Terdapat kesalahan");
+
     }
+
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())
@@ -209,6 +269,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .detailPerbaikan(serverChanges.getDetailPerbaikan())
                 .tanggalDibuat(serverChanges.getTanggalDibuat().toString())
                 .status(serverChanges.getStatus().toString())
+                .username(serverChanges.getAnggota().getUsername())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
                 .build();
 

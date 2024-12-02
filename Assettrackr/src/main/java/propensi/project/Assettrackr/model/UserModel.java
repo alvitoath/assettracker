@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -58,4 +59,7 @@ public class UserModel {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "anggota", fetch = FetchType.LAZY)
+    private List<ServerChanges> serverChanges;
 }

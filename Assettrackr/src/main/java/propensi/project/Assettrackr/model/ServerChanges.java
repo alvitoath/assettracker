@@ -37,11 +37,11 @@ public class ServerChanges {
     private String detailPerbaikan;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "tanggal_dibuat", nullable = false)
     private Date tanggalDibuat;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "tanggal_selesai")
     private Date tanggalSelesai;
 
@@ -56,5 +56,9 @@ public class ServerChanges {
     @ManyToOne
     @JoinColumn(name = "developer_id")
     private Developer developer;
+
+    @ManyToOne
+    @JoinColumn(name = "anggota_id")
+    private UserModel anggota;
 
 }

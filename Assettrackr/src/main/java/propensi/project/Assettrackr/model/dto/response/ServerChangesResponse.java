@@ -20,5 +20,6 @@ public class ServerChangesResponse {
     private String tanggalSelesai;
     private String divisi;
     private String solutionId;
+    private String username;
     private String solutionStatus;
 }
