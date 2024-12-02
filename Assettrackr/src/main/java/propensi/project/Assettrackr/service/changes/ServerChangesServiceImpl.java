@@ -200,7 +200,8 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         return finishedMapper(changesOpt.get());
     }
 
-    public ChartResponse getLineGraphDailySummary(SummaryRequest request){
+    public ChartResponse getLineGraphDailySummary(SummaryRequest request, UserModel user){
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);
         LocalDate dateEnd = LocalDate.parse(request.getEnd(), formatter);
@@ -213,7 +214,17 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             labels[i] = dateStart.plusDays(i).format(formatter);
         }
 
-        List<LineChartView> data = repository.lineChartSummaryDay(request.getStart(), request.getEnd());
+        List<LineChartView> data;
+
+        if (user.getRole().equals(Role.Anggota)){
+            String divisi = user.getDivisi().getId();
+            data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), divisi);
+        } else if (!request.getDivision().isEmpty()){
+            data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), request.getDivision());
+        }   else {
+            data = repository.lineChartSummaryDay(request.getStart(), request.getEnd());
+        }
+
         for (int i = 0; i < data.size(); i++) {
             LocalDate dataDate = LocalDate.parse(data.get(i).getTime(), formatter);
             Long daysBetweenData = ChronoUnit.DAYS.between(dateStart, dataDate);
@@ -222,7 +233,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         return new ChartResponse(labels, values);
     }
 
-    public ChartResponse getLineGraphMonthlySummary(SummaryRequest request){
+    public ChartResponse getLineGraphMonthlySummary(SummaryRequest request, UserModel user){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);
         LocalDate dateEnd = LocalDate.parse(request.getEnd(), formatter);
@@ -237,7 +248,17 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             labels[i] = dateStart.plusMonths(i).format(monthFormatter);
         }
 
-        List<LineChartView> data = repository.lineChartSummaryMonth(request.getStart(), request.getEnd());
+        List<LineChartView> data;
+
+        if (user.getRole().equals(Role.Anggota)){
+            String divisi = user.getDivisi().getId();
+            data = repository.lineChartSummaryMonthByDivisi(request.getStart(), request.getEnd(), divisi);
+        } else if (!request.getDivision().isEmpty()){
+            data = repository.lineChartSummaryMonthByDivisi(request.getStart(), request.getEnd(), request.getDivision());
+        }   else {
+            data = repository.lineChartSummaryMonth(request.getStart(), request.getEnd());
+        }
+
         for (int i = 0; i < data.size(); i++) {
             LocalDate dataDate = LocalDate.parse(data.get(i).getTime().substring(0, 10), formatter);
             Long daysBetweenData = ChronoUnit.MONTHS.between(dateStart.withDayOfMonth(1), dataDate.withDayOfMonth(1));

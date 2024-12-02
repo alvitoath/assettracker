@@ -1,5 +1,6 @@
 package propensi.project.Assettrackr.service.changes;
 
+import propensi.project.Assettrackr.model.UserModel;
 import propensi.project.Assettrackr.model.dto.request.*;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ChartResponse;
@@ -24,7 +25,7 @@ public interface ServerChangesService {
     public FinishedChangesResponse updateDeveloper(String changesId, AssignUpdateDeveloperRequest request) throws RuntimeException;
     public FinishedChangesResponse finishChanges(String changesId) throws RuntimeException;
     public FinishedChangesResponse getFinishById(String changesId);
-    public ChartResponse getLineGraphDailySummary(SummaryRequest request);
-    public ChartResponse getLineGraphMonthlySummary(SummaryRequest request);
+    public ChartResponse getLineGraphDailySummary(SummaryRequest request, UserModel user);
+    public ChartResponse getLineGraphMonthlySummary(SummaryRequest request, UserModel user);
     public FinishedChangesResponse getResponseById(String changesId);
 }

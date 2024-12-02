@@ -4,13 +4,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import propensi.project.Assettrackr.model.UserModel;
 import propensi.project.Assettrackr.model.dto.RestResponse;
 import propensi.project.Assettrackr.model.dto.request.*;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ChartResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.service.changes.ServerChangesService;
+import propensi.project.Assettrackr.service.user.UserService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -21,6 +26,9 @@ public class ChangesController {
 
     @Autowired
     private ServerChangesService service;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<ServerChangesResponse> createServerChanges(@RequestBody CreateChangesRequest request, HttpServletRequest servletRequest){
@@ -191,15 +199,26 @@ public class ChangesController {
 
     @GetMapping("/summary/day")
     public ResponseEntity<RestResponse> getDailySummary(@RequestBody SummaryRequest request){
-        ChartResponse data = service.getLineGraphDailySummary(request);
+        ChartResponse data = service.getLineGraphDailySummary(request, getCurrentUser());
         RestResponse response = new RestResponse("Here is your data!", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/summary/month")
     public ResponseEntity<RestResponse> getMonthlySummary(@RequestBody SummaryRequest request){
-        ChartResponse data = service.getLineGraphMonthlySummary(request);
+        ChartResponse data = service.getLineGraphMonthlySummary(request, getCurrentUser());
         RestResponse response = new RestResponse("Here is your data!", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private UserModel getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            // Fetch the user from the database using the username
+            return userService.getUserByUsername(username);
+        } else {
+            throw new RuntimeException("User not authenticated");
+        }
     }
 }

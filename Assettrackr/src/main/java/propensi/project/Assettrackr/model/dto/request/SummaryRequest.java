@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class SummaryRequest {
     private String start;
     private String end;
+    private String division;
 }
 

@@ -158,6 +158,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    public UserModel getUserByUsername(String username)throws RuntimeException{
+        Optional<UserModel> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) throw new RuntimeException("User not found");
+        return userOpt.get();
+    }
+
     public String encrypt(String password) {
         var passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
