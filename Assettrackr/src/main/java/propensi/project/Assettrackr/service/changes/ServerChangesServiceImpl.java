@@ -194,6 +194,12 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
     }
 
+    public FinishedChangesResponse getResponseById(String changesId){
+        Optional<ServerChanges> changesOpt = repository.findById(changesId);
+        if (changesOpt.isEmpty()) throw new RuntimeException("Id not found");
+        return finishedMapper(changesOpt.get());
+    }
+
     public ChartResponse getLineGraphDailySummary(SummaryRequest request){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);

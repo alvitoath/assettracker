@@ -122,6 +122,18 @@ public class ChangesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/get/{changesId}")
+    public ResponseEntity<RestResponse> getServerChangesById(@PathVariable("changesId") String changesId){
+        try {
+            FinishedChangesResponse data = service.getFinishById(changesId);
+            RestResponse response = new RestResponse("Here is your data", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/reject/{changesId}")
     public ResponseEntity<RestResponse> rejectServerChanges(@PathVariable("changesId") String changesId){
         try {

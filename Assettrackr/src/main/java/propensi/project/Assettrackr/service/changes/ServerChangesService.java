@@ -26,4 +26,5 @@ public interface ServerChangesService {
     public FinishedChangesResponse getFinishById(String changesId);
     public ChartResponse getLineGraphDailySummary(SummaryRequest request);
     public ChartResponse getLineGraphMonthlySummary(SummaryRequest request);
+    public FinishedChangesResponse getResponseById(String changesId);
 }
