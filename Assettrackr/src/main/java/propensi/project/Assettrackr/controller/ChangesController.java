@@ -125,7 +125,7 @@ public class ChangesController {
     @GetMapping("/get/{changesId}")
     public ResponseEntity<RestResponse> getServerChangesById(@PathVariable("changesId") String changesId){
         try {
-            FinishedChangesResponse data = service.getFinishById(changesId);
+            FinishedChangesResponse data = service.getResponseById(changesId);
             RestResponse response = new RestResponse("Here is your data", data);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
