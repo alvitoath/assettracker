@@ -138,10 +138,10 @@ public class ChangesController {
         }
     }
 
-    @PostMapping("/assign/{serverChangesId}/{developerId}")
-    public ResponseEntity<RestResponse> assignDeveloper(@PathVariable("serverChangesId")String changesId, @PathVariable("developerId")String developerId){
+    @PostMapping("/assign/{serverChangesId}")
+    public ResponseEntity<RestResponse> assignDeveloper(@PathVariable("serverChangesId")String changesId, @RequestBody AssignUpdateDeveloperRequest request){
         try {
-            FinishedChangesResponse data = service.assingDeveloper(changesId, developerId);
+            FinishedChangesResponse data = service.assingDeveloper(changesId, request);
             RestResponse response = new RestResponse("Here is your data!", data);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EntityNotFoundException e){
@@ -154,7 +154,7 @@ public class ChangesController {
     }
 
     @PutMapping("/developer/update/{serverChangesId}")
-    public ResponseEntity<RestResponse> updateDeveloper(@PathVariable("serverChangesId")String serverChangeId, @RequestBody ServerChangesDeveloperUpdateRequest request){
+    public ResponseEntity<RestResponse> updateDeveloper(@PathVariable("serverChangesId")String serverChangeId, @RequestBody AssignUpdateDeveloperRequest request){
         try {
             FinishedChangesResponse data = service.updateDeveloper(serverChangeId, request);
             RestResponse response = new RestResponse("Permintaan berhasil diubah dan disimpan!", data);

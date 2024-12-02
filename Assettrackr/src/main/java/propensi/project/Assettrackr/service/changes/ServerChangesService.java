@@ -20,8 +20,8 @@ public interface ServerChangesService {
     public Boolean rejectServerChanges(String id);
     public List<FinishedChangesResponse> getAllFinishByDivisiId(String id);
     public List<FinishedChangesResponse> getAllSolvedSolution();
-    public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException;
-    public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException;
+    public FinishedChangesResponse assingDeveloper(String changesId, AssignUpdateDeveloperRequest request)throws EntityNotFoundException, RuntimeException;
+    public FinishedChangesResponse updateDeveloper(String changesId, AssignUpdateDeveloperRequest request) throws RuntimeException;
     public FinishedChangesResponse finishChanges(String changesId) throws RuntimeException;
     public FinishedChangesResponse getFinishById(String changesId);
     public ChartResponse getLineGraphDailySummary(SummaryRequest request);

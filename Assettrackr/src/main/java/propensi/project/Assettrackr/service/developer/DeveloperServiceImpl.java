@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import propensi.project.Assettrackr.model.Developer;
 import propensi.project.Assettrackr.model.DeveloperStatus;
+import propensi.project.Assettrackr.model.ServerChanges;
 import propensi.project.Assettrackr.model.dto.request.CreateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.repository.DeveloperRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ public class DeveloperServiceImpl implements DeveloperService{
         Developer developer = Developer.builder()
                 .nama(request.getNama())
                 .keahlian(request.getKeahlian())
+                .serverChanges(new ArrayList<ServerChanges>())
                 .status(DeveloperStatus.Available).build();
         repository.save(developer);
 

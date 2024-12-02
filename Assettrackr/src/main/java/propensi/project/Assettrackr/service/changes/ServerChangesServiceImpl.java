@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import propensi.project.Assettrackr.model.*;
 import propensi.project.Assettrackr.model.dto.request.*;
+import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ChartResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
@@ -15,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +56,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .tanggalDibuat(new Date())
                 .status(ServerChangesStatus.valueOf(request.getStatus()))
                 .anggota(user)
+                .developers(new ArrayList<Developer>())
                 .build());
 
 
@@ -169,16 +172,22 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         List<ServerChanges> response = repository.findFinishedChangesSolution();
         return response.stream().map(this::finishedMapper).collect(Collectors.toList());
     }
-
-    public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException{
+    @Override
+    public FinishedChangesResponse assingDeveloper(String changesId, AssignUpdateDeveloperRequest request)throws EntityNotFoundException, RuntimeException{
+        String[] devIds = request.getDeveloperIds().split(",");
         ServerChanges serverChanges = repository.getReferenceById(changesId);
-        Developer developer = developerRepository.getReferenceById(developerId);
 
         if (serverChanges.getSolution().getStatus()!= SolutionStatus.Solved) throw new RuntimeException("Solusi belum dibuat");
-        if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer sedang tidak tersedia");
 
-        developer.setStatus(DeveloperStatus.Unavailable);
-        serverChanges.setDeveloper(developer);
+
+        for (String id: devIds){
+            Developer developer = developerRepository.getReferenceById(id);
+            if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer sedang tidak tersedia");
+            developer.setStatus(DeveloperStatus.Unavailable);
+            serverChanges.getDevelopers().add(developer);
+            developerRepository.save(developer);
+        }
+
         Server server = serverChanges.getServer();
         server.setStatus(Status.MAINTENANCE);
         return finishedMapper(repository.save(serverChanges));
@@ -230,29 +239,38 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         }
         return new ChartResponse(labels, values);
     }
-
-    public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException{
+    @Override
+    public FinishedChangesResponse updateDeveloper(String changesId, AssignUpdateDeveloperRequest request) throws RuntimeException{
         ServerChanges serverChanges = repository.getReferenceById(changesId);
-        if (serverChanges.getDeveloper() == null) throw new RuntimeException("Belum ter-assign developer");
+        if (serverChanges.getDevelopers().isEmpty()) throw new RuntimeException("Belum ter-assign developer");
 
-        Developer developerNew = developerRepository.getReferenceById(request.getDeveloperId());
-        if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
+        String[] devIds = request.getDeveloperIds().split(",");
 
-        Developer developerOld = serverChanges.getDeveloper();
-        developerNew.setStatus(DeveloperStatus.Unavailable);
-        developerOld.setStatus(DeveloperStatus.Available);
-        serverChanges.setDeveloper(developerNew);
-        developerRepository.save(developerOld);
-        developerRepository.save(developerNew);
+        for (Developer dev: serverChanges.getDevelopers()){
+            dev.setStatus(DeveloperStatus.Available);
+            developerRepository.save(dev);
+        }
+
+        serverChanges.getDevelopers().clear();
+
+        for (String id: devIds){
+            Developer developerNew = developerRepository.getReferenceById(id);
+            if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
+            developerNew.setStatus(DeveloperStatus.Unavailable);
+            developerRepository.save(developerNew);
+            serverChanges.getDevelopers().add(developerNew);
+        }
+
         return finishedMapper(repository.save(serverChanges));
     }
 
     public FinishedChangesResponse finishChanges(String changesId) throws RuntimeException{
         ServerChanges serverChanges = repository.getReferenceById(changesId);
-        if (serverChanges.getStatus().equals(ServerChangesStatus.Unsolved) && serverChanges.getSolution() != null && serverChanges.getSolution().getStatus().equals(SolutionStatus.Solved) && serverChanges.getDeveloper() != null){
-            Developer developer = serverChanges.getDeveloper();
-            developer.setStatus(DeveloperStatus.Available);
-            developerRepository.save(developer);
+        if (serverChanges.getStatus().equals(ServerChangesStatus.Unsolved) && serverChanges.getSolution() != null && serverChanges.getSolution().getStatus().equals(SolutionStatus.Solved) && !serverChanges.getDevelopers().isEmpty()){
+            for (Developer dev: serverChanges.getDevelopers()){
+                dev.setStatus(DeveloperStatus.Available);
+                developerRepository.save(dev);
+            }
             serverChanges.setStatus(ServerChangesStatus.Solved);
             return finishedMapper(repository.save(serverChanges));
         }
@@ -308,11 +326,15 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .solution(serverChanges.getSolution().getSolution())
                 .solutionStatus(serverChanges.getSolution().getStatus().toString()).build();
 
-        if (serverChanges.getDeveloper() != null){
-            response.setDeveloperId(serverChanges.getDeveloper().getId());
-            response.setDeveloperName(serverChanges.getDeveloper().getNama());
-            response.setDeveloperStatus(serverChanges.getDeveloper().getStatus().toString());
+        if (!serverChanges.getDevelopers().isEmpty()){
+            List<DeveloperResponse> devResponses = serverChanges.getDevelopers().stream().map(this::devMapper).collect(Collectors.toList());
+            response.setDevelopers(devResponses);
         }
+
         return response;
+    }
+
+    private DeveloperResponse devMapper(Developer dev){
+        return new DeveloperResponse(dev.getId(), dev.getNama(), dev.getKeahlian(), dev.getStatus().toString());
     }
 }

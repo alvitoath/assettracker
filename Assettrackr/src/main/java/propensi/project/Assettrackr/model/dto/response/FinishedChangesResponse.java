@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -22,7 +24,5 @@ public class FinishedChangesResponse {
     private String solutionId;
     private String solution;
     private String solutionStatus;
-    private String developerId;
-    private String developerName;
-    private String developerStatus;
+    private List<DeveloperResponse> developers;
 }

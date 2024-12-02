@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -53,9 +54,13 @@ public class ServerChanges {
     @OneToOne(mappedBy = "serverChanges")
     private ChangesSolution solution;
 
-    @ManyToOne
-    @JoinColumn(name = "developer_id")
-    private Developer developer;
+    @ManyToMany
+    @JoinTable(
+            name = "server_changes_developers",
+            joinColumns = @JoinColumn(name = "server_changes_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id")
+    )
+    private List<Developer> developers;
 
     @ManyToOne
     @JoinColumn(name = "anggota_id")

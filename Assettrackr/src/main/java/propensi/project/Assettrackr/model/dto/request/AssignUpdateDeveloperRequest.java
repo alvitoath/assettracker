@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ServerChangesDeveloperUpdateRequest {
-    private String developerId;
+public class AssignUpdateDeveloperRequest {
+    private String developerIds;
 }

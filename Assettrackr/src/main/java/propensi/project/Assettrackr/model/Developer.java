@@ -25,12 +25,15 @@ public class Developer {
 
     @Column(name = "nama")
     private String nama;
+
     @Column(name = "keahlian")
     private String keahlian;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private DeveloperStatus status;
-    @OneToMany(mappedBy = "developer", fetch = FetchType.LAZY)
+
+    @ManyToMany(mappedBy = "developers")
     private List<ServerChanges> serverChanges;
 }
