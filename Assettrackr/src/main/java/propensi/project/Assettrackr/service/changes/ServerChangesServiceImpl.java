@@ -260,6 +260,12 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
     }
 
+    @Override
+    public FinishedChangesResponse getFinishById(String changesId) {
+        ServerChanges changes = repository.getReferenceById(changesId);
+        return finishedMapper(changes);
+    }
+
     private ServerChangesResponse mapper(ServerChanges serverChanges){
         ServerChangesResponse response = ServerChangesResponse.builder()
                 .id(serverChanges.getId())

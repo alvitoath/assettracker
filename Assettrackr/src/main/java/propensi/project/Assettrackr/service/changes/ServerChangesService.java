@@ -23,6 +23,7 @@ public interface ServerChangesService {
     public FinishedChangesResponse assingDeveloper(String changesId, String developerId)throws EntityNotFoundException, RuntimeException;
     public FinishedChangesResponse updateDeveloper(String changesId, ServerChangesDeveloperUpdateRequest request) throws RuntimeException;
     public FinishedChangesResponse finishChanges(String changesId) throws RuntimeException;
+    public FinishedChangesResponse getFinishById(String changesId);
     public ChartResponse getLineGraphDailySummary(SummaryRequest request);
     public ChartResponse getLineGraphMonthlySummary(SummaryRequest request);
 }

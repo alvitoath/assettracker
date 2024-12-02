@@ -101,6 +101,13 @@ public class ChangesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/operational/{changesId}")
+    public ResponseEntity<RestResponse> getServerChangeOperationalById(@PathVariable("changesId") String changesId){
+        FinishedChangesResponse data = service.getFinishById(changesId);
+        RestResponse response = new RestResponse("Here is your data", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/divisi/name/{divisiName}")
     public ResponseEntity<RestResponse> getServerChangesByDivisiName(@PathVariable("divisiName") String name){
         List<ServerChangesResponse> data = service.getServerChangesByDivisiName(name);
@@ -109,7 +116,7 @@ public class ChangesController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<RestResponse> getAllDeveloper(){
+    public ResponseEntity<RestResponse> getAllServerChanges(){
         List<ServerChangesResponse> data = service.getAll();
         RestResponse response = new RestResponse("Here is your data", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
