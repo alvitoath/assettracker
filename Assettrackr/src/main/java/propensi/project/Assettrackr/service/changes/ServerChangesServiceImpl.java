@@ -148,9 +148,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     @Override
-    public List<ServerChangesResponse> getAll() {
+    public List<FinishedChangesResponse> getAll() {
         List<ServerChanges> response = repository.findAll();
-        return response.stream().map(this::mapper).collect(Collectors.toList());
+        return response.stream().map(this::finishedMapper).collect(Collectors.toList());
     }
 
     @Override
@@ -319,7 +319,6 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .tipePerbaikan(serverChanges.getTipePerbaikan())
                 .detailPerbaikan(serverChanges.getDetailPerbaikan())
                 .tanggalDibuat(String.valueOf(serverChanges.getTanggalDibuat()))
-                .tanggalSelesai(String.valueOf(serverChanges.getTanggalSelesai()))
                 .status(serverChanges.getStatus().toString())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
                 .solutionId(serverChanges.getSolution().getId())
@@ -329,6 +328,10 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         if (!serverChanges.getDevelopers().isEmpty()){
             List<DeveloperResponse> devResponses = serverChanges.getDevelopers().stream().map(this::devMapper).collect(Collectors.toList());
             response.setDevelopers(devResponses);
+        }
+
+        if (serverChanges.getTanggalSelesai() != null){
+            response.setTanggalSelesai(String.valueOf(serverChanges.getTanggalSelesai()));
         }
 
         return response;
