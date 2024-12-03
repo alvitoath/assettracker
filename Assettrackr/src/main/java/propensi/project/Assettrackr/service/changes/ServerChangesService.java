@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ServerChangesService {
 
-    public ServerChangesResponse createServerChanges(CreateChangesRequest request , String token) throws Exception;
+    public ServerChangesResponse createServerChanges(CreateChangesRequest request, UserModel user) throws Exception;
     public ServerChangesResponse getServerChangesDetail(String id) ;
     public ServerChangesResponse updateServerChanges(String id, UpdateChangesRequest request);
     public Boolean deleteServer(String id) throws RuntimeException;

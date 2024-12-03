@@ -44,11 +44,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     private JwtUtils jwtUtils;
 
     @Override
-    public ServerChangesResponse createServerChanges(CreateChangesRequest request, String token) throws Exception{
-        String username = jwtUtils.getUserNameFromJwtToken(token);
-        Optional<UserModel> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
-        UserModel user = userOpt.get();
+    public ServerChangesResponse createServerChanges(CreateChangesRequest request, UserModel user) throws Exception{
         Server server = serverRepository.getReferenceById(request.getServerId());
         ServerChanges response = repository.save(ServerChanges.builder()
                 .server(server)

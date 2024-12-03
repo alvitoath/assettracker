@@ -33,14 +33,7 @@ public class ChangesController {
     @PostMapping("/create")
     public ResponseEntity<ServerChangesResponse> createServerChanges(@RequestBody CreateChangesRequest request, HttpServletRequest servletRequest){
         try {
-            String headerAuth = servletRequest.getHeader("Authorization");
-            String token;
-            if (headerAuth.startsWith("Bearer")){
-                token = headerAuth.substring(7);
-            } else {
-                token = headerAuth;
-            }
-            ServerChangesResponse response =  service.createServerChanges(request, token);
+            ServerChangesResponse response =  service.createServerChanges(request, getCurrentUser());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
