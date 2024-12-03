@@ -306,10 +306,8 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         if (serverChanges.getAssignStatus() != null && serverChanges.getAssignStatus().equals(DeveloperAssignStatus.Assigned)) throw new RuntimeException("Tidak dapat meng-assign developer");
 
         String[] devIds = request.getDeveloperIds().split(",");
-
+        serverChanges.getDevelopers().clear();
         if (request.getAssignStatus().equals(DeveloperAssignStatus.Draft.toString())){
-
-            serverChanges.getDevelopers().clear();
 
             for (String id: devIds){
                 Developer developerNew = developerRepository.getReferenceById(id);
@@ -318,7 +316,6 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             }
             serverChanges.setAssignStatus(DeveloperAssignStatus.Draft);
         } else {
-
             for (String id: devIds){
                 Developer developerNew = developerRepository.getReferenceById(id);
                 if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
