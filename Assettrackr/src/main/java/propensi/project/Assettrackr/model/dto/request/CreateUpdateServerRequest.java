@@ -18,4 +18,5 @@ public class CreateUpdateServerRequest {
     private String versiBahasa;
     private String framework;
     private String versiFramework;
+    private String environment;
 }

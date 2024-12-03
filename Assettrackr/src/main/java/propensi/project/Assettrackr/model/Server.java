@@ -77,6 +77,10 @@ public class Server {
     @Column(name = "versi_framework", nullable = false)
     private String versiFramework;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "environment")
+    private ServerEnvironment environment;
+
     @JsonIgnore
     @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
     private List<ServerChanges> listServerChanges;

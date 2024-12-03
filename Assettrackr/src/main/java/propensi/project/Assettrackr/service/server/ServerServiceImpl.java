@@ -2,10 +2,7 @@ package propensi.project.Assettrackr.service.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import propensi.project.Assettrackr.model.Divisi;
-import propensi.project.Assettrackr.model.Server;
-import propensi.project.Assettrackr.model.ServerChanges;
-import propensi.project.Assettrackr.model.Status;
+import propensi.project.Assettrackr.model.*;
 import propensi.project.Assettrackr.model.dto.request.CreateUpdateServerRequest;
 import propensi.project.Assettrackr.model.dto.response.GetServerResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerDetailResponse;
@@ -55,6 +52,7 @@ public class ServerServiceImpl implements ServerService{
                 .versiBahasa(request.getVersiBahasa())
                 .framework(request.getFramework())
                 .versiFramework(request.getVersiFramework())
+                .environment(ServerEnvironment.valueOf(request.getEnvironment()))
                 .listServerChanges(new ArrayList<>())
                 .build());
     }
@@ -66,7 +64,7 @@ public class ServerServiceImpl implements ServerService{
         Divisi divisi = divisiOpt.get();
         List<Server> lstServer = divisi.getListServer();
 
-        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), divisi.getNama(), String.valueOf(server.getStatus()), String.valueOf(server.getEnvironment()))).collect(Collectors.toList());
     }
     @Override
     public String deleteServer(String id) throws RuntimeException{
@@ -98,6 +96,7 @@ public class ServerServiceImpl implements ServerService{
         if (!request.getVersiBahasa().isEmpty()) server.setVersiBahasa(request.getVersiBahasa());
         if (!request.getFramework().isEmpty()) server.setFramework(request.getFramework());
         if (!request.getVersiFramework().isEmpty()) server.setVersiFramework(request.getVersiFramework());
+        if (!request.getEnvironment().isEmpty()) server.setEnvironment(ServerEnvironment.valueOf(request.getEnvironment()));
         repository.save(server);
         return true;
     }
@@ -110,12 +109,12 @@ public class ServerServiceImpl implements ServerService{
 
         return new ServerDetailResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(),
                 server.getDivisi().getNama(), server.getLokasi(), server.getStatus().toString(), server.getSistemOperasi(),
-                server.getBahasaPemrograman(), server.getVersiBahasa(), server.getFramework(), server.getVersiFramework());
+                server.getBahasaPemrograman(), server.getVersiBahasa(), server.getFramework(), server.getVersiFramework(), server.getEnvironment().toString());
     }
 
     @Override
     public List<GetServerResponse> getAllServer() throws RuntimeException{
         List<Server> lstServer = repository.findAll();
-        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama(), String.valueOf(server.getStatus()))).collect(Collectors.toList());
+        return lstServer.stream().map(server -> new GetServerResponse(String.valueOf(server.getId()), server.getNama(), server.getIpAddress(), server.getDivisi().getNama(), String.valueOf(server.getStatus()), String.valueOf(server.getEnvironment()))).collect(Collectors.toList());
     }
 }

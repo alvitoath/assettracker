@@ -14,4 +14,5 @@ public class GetServerResponse {
     private String ipAddress;
     private String divisi;
     private String status;
+    private String environment;
 }

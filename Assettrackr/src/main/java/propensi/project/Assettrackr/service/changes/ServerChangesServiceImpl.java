@@ -224,7 +224,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         List<LineChartView> data;
 
         if (user.getRole().equals(Role.Anggota)){
-            String divisi = user.getDivisi().getId();
+            String divisi = user.getDivisi().getNama();
             data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), divisi);
         } else if (request.getDivision() != null && !request.getDivision().isEmpty()){
             data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), request.getDivision());

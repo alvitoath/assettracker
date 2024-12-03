@@ -21,4 +21,5 @@ public class ServerDetailResponse {
     private String versiBahasa;
     private String framework;
     private String versiFramework;
+    private String environment;
 }
