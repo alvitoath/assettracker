@@ -404,7 +404,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         if (serverChanges.getSolution() != null){
             response.setSolution(serverChanges.getSolution().getId());
             response.setSolutionStatus(serverChanges.getSolution().getStatus().toString());
-            if (serverChanges.getSolution().getSolution().isEmpty()) {
+            if (serverChanges.getSolution().getSolution() != null && serverChanges.getSolution().getSolution().isEmpty()) {
                 response.setSolution(serverChanges.getSolution().getSolution());
             } else {
                 response.setSolution("");
