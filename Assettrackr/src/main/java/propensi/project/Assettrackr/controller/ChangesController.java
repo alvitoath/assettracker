@@ -211,6 +211,13 @@ public class ChangesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/chart")
+    public ResponseEntity<RestResponse> getPieChart(@RequestBody SummaryRequest request){
+        ChartResponse data = service.getPieChartSummary(request, getCurrentUser());
+        RestResponse response = new RestResponse("Here is your data!", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     private UserModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {

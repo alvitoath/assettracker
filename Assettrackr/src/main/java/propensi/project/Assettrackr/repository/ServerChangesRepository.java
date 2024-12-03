@@ -35,4 +35,7 @@ public interface ServerChangesRepository extends JpaRepository<ServerChanges, St
 
     @Query(value = "SELECT sc.tipe_perbaikan as TipePerbaikan, COUNT(*) as Jumlah FROM server_changes sc WHERE sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tipe_perbaikan", nativeQuery = true)
     List<PieChartView> pieChartSummary(String start, String end);
+
+    @Query(value = "SELECT sc.tipe_perbaikan as TipePerbaikan, COUNT(*) as Jumlah FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = :divisiId AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tipe_perbaikan", nativeQuery = true)
+    List<PieChartView> pieChartSummaryByDivisi(String start, String end, String divisiId);
 }

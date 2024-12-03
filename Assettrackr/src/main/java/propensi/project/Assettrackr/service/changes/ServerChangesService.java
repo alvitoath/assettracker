@@ -28,4 +28,5 @@ public interface ServerChangesService {
     public ChartResponse getLineGraphDailySummary(SummaryRequest request, UserModel user);
     public ChartResponse getLineGraphMonthlySummary(SummaryRequest request, UserModel user);
     public FinishedChangesResponse getResponseById(String changesId);
+    public ChartResponse getPieChartSummary(SummaryRequest request, UserModel user);
 }

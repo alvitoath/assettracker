@@ -9,6 +9,7 @@ import propensi.project.Assettrackr.model.dto.response.FinishedChangesResponse;
 import propensi.project.Assettrackr.model.dto.response.ChartResponse;
 import propensi.project.Assettrackr.model.dto.response.ServerChangesResponse;
 import propensi.project.Assettrackr.model.projection.LineChartView;
+import propensi.project.Assettrackr.model.projection.PieChartView;
 import propensi.project.Assettrackr.repository.*;
 import propensi.project.Assettrackr.security.jwt.JwtUtils;
 
@@ -274,6 +275,32 @@ public class ServerChangesServiceImpl implements ServerChangesService{
             Long daysBetweenData = ChronoUnit.MONTHS.between(dateStart.withDayOfMonth(1), dataDate.withDayOfMonth(1));
             values[Math.toIntExact(daysBetweenData)] = data.get(i).getTotalChanges();
         }
+        return new ChartResponse(labels, values);
+    }
+
+    public ChartResponse getPieChartSummary(SummaryRequest request, UserModel user){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateStart = LocalDate.parse(request.getStart(), formatter);
+        LocalDate dateEnd = LocalDate.parse(request.getEnd(), formatter);
+
+        List<PieChartView> data;
+        if (user.getRole().equals(Role.Anggota)){
+            String divisi = user.getDivisi().getId();
+            data = repository.pieChartSummaryByDivisi(request.getStart(), request.getEnd(), divisi);
+        } else if (!request.getDivision().isEmpty()){
+            data = repository.pieChartSummaryByDivisi(request.getStart(), request.getEnd(), request.getDivision());
+        }   else {
+            data = repository.pieChartSummary(request.getStart(), request.getEnd());
+        }
+
+        Long[] values = new Long[data.size()];
+        String[] labels = new String[data.size()];
+
+        for (int i = 0; i < data.size(); i++) {
+            labels[i] = data.get(i).getTipePerbaikan();
+            values[i] = data.get(i).getJumlah();
+        }
+
         return new ChartResponse(labels, values);
     }
     @Override
