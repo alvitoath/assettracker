@@ -226,7 +226,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         if (user.getRole().equals(Role.Anggota)){
             String divisi = user.getDivisi().getId();
             data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), divisi);
-        } else if (!request.getDivision().isEmpty()){
+        } else if (request.getDivision() != null && !request.getDivision().isEmpty()){
             data = repository.lineChartSummaryDayByDivisi(request.getStart(), request.getEnd(), request.getDivision());
         }   else {
             data = repository.lineChartSummaryDay(request.getStart(), request.getEnd());
@@ -258,9 +258,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         List<LineChartView> data;
 
         if (user.getRole().equals(Role.Anggota)){
-            String divisi = user.getDivisi().getId();
+            String divisi = user.getDivisi().getNama();
             data = repository.lineChartSummaryMonthByDivisi(request.getStart(), request.getEnd(), divisi);
-        } else if (!request.getDivision().isEmpty()){
+        } else if (request.getDivision() != null && !request.getDivision().isEmpty()){
             data = repository.lineChartSummaryMonthByDivisi(request.getStart(), request.getEnd(), request.getDivision());
         }   else {
             data = repository.lineChartSummaryMonth(request.getStart(), request.getEnd());
@@ -281,9 +281,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
         List<PieChartView> data;
         if (user.getRole().equals(Role.Anggota)){
-            String divisi = user.getDivisi().getId();
+            String divisi = user.getDivisi().getNama();
             data = repository.pieChartSummaryByDivisi(request.getStart(), request.getEnd(), divisi);
-        } else if (!request.getDivision().isEmpty()){
+        } else if (request.getDivision() != null && !request.getDivision().isEmpty()){
             data = repository.pieChartSummaryByDivisi(request.getStart(), request.getEnd(), request.getDivision());
         }   else {
             data = repository.pieChartSummary(request.getStart(), request.getEnd());
@@ -386,9 +386,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 .tanggalDibuat(String.valueOf(serverChanges.getTanggalDibuat()))
                 .status(serverChanges.getStatus().toString())
                 .divisi(serverChanges.getServer().getDivisi().getNama())
-                .solutionId(serverChanges.getSolution().getId())
-                .solution(serverChanges.getSolution().getSolution())
-                .solutionStatus(serverChanges.getSolution().getStatus().toString()).build();
+                .build();
 
         if (!serverChanges.getDevelopers().isEmpty()){
             List<DeveloperResponse> devResponses = serverChanges.getDevelopers().stream().map(this::devMapper).collect(Collectors.toList());
@@ -401,6 +399,16 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
         if (serverChanges.getAssignStatus() != null){
             response.setAssignStatus(String.valueOf(serverChanges.getAssignStatus()));
+        }
+
+        if (serverChanges.getSolution() != null){
+            response.setSolution(serverChanges.getSolution().getId());
+            response.setSolutionStatus(serverChanges.getSolution().getStatus().toString());
+            if (serverChanges.getSolution().getSolution().isEmpty()) {
+                response.setSolution(serverChanges.getSolution().getSolution());
+            } else {
+                response.setSolution("");
+            }
         }
 
         return response;

@@ -27,15 +27,15 @@ public interface ServerChangesRepository extends JpaRepository<ServerChanges, St
     @Query(value = "SELECT DATE_TRUNC('month', tanggal_dibuat) as Time, COUNT(*) AS TotalChanges FROM server_changes WHERE tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY DATE_TRUNC('month', tanggal_dibuat) ORDER BY Time", nativeQuery = true)
     List<LineChartView> lineChartSummaryMonth(String start, String end);
 
-    @Query(value = "SELECT sc.tanggal_dibuat as Time, COUNT(*) AS TotalChanges FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = :divisiId AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tanggal_dibuat order by Time", nativeQuery = true)
-    List<LineChartView> lineChartSummaryDayByDivisi(String start, String end, String divisiId);
+    @Query(value = "SELECT sc.tanggal_dibuat as Time, COUNT(*) AS TotalChanges FROM server_changes sc, server se, divisi di WHERE sc.server_id = se.id AND se.divisi_id = di.id AND di.nama = :divisiName AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tanggal_dibuat order by Time", nativeQuery = true)
+    List<LineChartView> lineChartSummaryDayByDivisi(String start, String end, String divisiName);
 
-    @Query(value = "SELECT DATE_TRUNC('month', sc.tanggal_dibuat) as Time, COUNT(*) AS TotalChanges FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = :divisiId AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY DATE_TRUNC('month', sc.tanggal_dibuat) ORDER BY Time", nativeQuery = true)
-    List<LineChartView> lineChartSummaryMonthByDivisi(String start, String end, String divisiId);
+    @Query(value = "SELECT DATE_TRUNC('month', sc.tanggal_dibuat) as Time, COUNT(*) AS TotalChanges FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = di.id AND di.nama = :divisiName AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY DATE_TRUNC('month', sc.tanggal_dibuat) ORDER BY Time", nativeQuery = true)
+    List<LineChartView> lineChartSummaryMonthByDivisi(String start, String end, String divisiName);
 
     @Query(value = "SELECT sc.tipe_perbaikan as TipePerbaikan, COUNT(*) as Jumlah FROM server_changes sc WHERE sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tipe_perbaikan", nativeQuery = true)
     List<PieChartView> pieChartSummary(String start, String end);
 
-    @Query(value = "SELECT sc.tipe_perbaikan as TipePerbaikan, COUNT(*) as Jumlah FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = :divisiId AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tipe_perbaikan", nativeQuery = true)
-    List<PieChartView> pieChartSummaryByDivisi(String start, String end, String divisiId);
+    @Query(value = "SELECT sc.tipe_perbaikan as TipePerbaikan, COUNT(*) as Jumlah FROM server_changes sc, server se WHERE sc.server_id = se.id AND se.divisi_id = di.id AND di.nama = :divisiName AND sc.tanggal_dibuat BETWEEN CAST(:start AS DATE) AND CAST(:end AS DATE) GROUP BY sc.tipe_perbaikan", nativeQuery = true)
+    List<PieChartView> pieChartSummaryByDivisi(String start, String end, String divisiName);
 }

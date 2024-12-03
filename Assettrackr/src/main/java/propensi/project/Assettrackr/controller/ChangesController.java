@@ -190,21 +190,21 @@ public class ChangesController {
         }
     }
 
-    @GetMapping("/summary/day")
+    @PostMapping("/summary/day")
     public ResponseEntity<RestResponse> getDailySummary(@RequestBody SummaryRequest request){
         ChartResponse data = service.getLineGraphDailySummary(request, getCurrentUser());
         RestResponse response = new RestResponse("Here is your data!", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/summary/month")
+    @PostMapping("/summary/month")
     public ResponseEntity<RestResponse> getMonthlySummary(@RequestBody SummaryRequest request){
         ChartResponse data = service.getLineGraphMonthlySummary(request, getCurrentUser());
         RestResponse response = new RestResponse("Here is your data!", data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/chart")
+    @PostMapping("/chart")
     public ResponseEntity<RestResponse> getPieChart(@RequestBody SummaryRequest request){
         ChartResponse data = service.getPieChartSummary(request, getCurrentUser());
         RestResponse response = new RestResponse("Here is your data!", data);
