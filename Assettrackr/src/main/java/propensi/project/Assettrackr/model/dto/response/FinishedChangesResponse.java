@@ -24,5 +24,6 @@ public class FinishedChangesResponse {
     private String solutionId;
     private String solution;
     private String solutionStatus;
+    private String assignStatus;
     private List<DeveloperResponse> developers;
 }

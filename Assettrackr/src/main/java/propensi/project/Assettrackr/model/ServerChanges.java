@@ -46,13 +46,16 @@ public class ServerChanges {
     @Column(name = "tanggal_selesai")
     private Date tanggalSelesai;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ServerChangesStatus status; // One process atau draft
 
     @OneToOne(mappedBy = "serverChanges")
     private ChangesSolution solution;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "developer_assign_status")
+    private DeveloperAssignStatus assignStatus;
 
     @ManyToMany
     @JoinTable(

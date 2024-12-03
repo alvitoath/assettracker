@@ -179,17 +179,27 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
         if (serverChanges.getSolution().getStatus()!= SolutionStatus.Solved) throw new RuntimeException("Solusi belum dibuat");
 
-
-        for (String id: devIds){
-            Developer developer = developerRepository.getReferenceById(id);
-            if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer sedang tidak tersedia");
-            developer.setStatus(DeveloperStatus.Unavailable);
-            serverChanges.getDevelopers().add(developer);
-            developerRepository.save(developer);
+        if (request.getAssignStatus().equals(DeveloperAssignStatus.Draft.toString())){
+            for (String id: devIds){
+                Developer developer = developerRepository.getReferenceById(id);
+                if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Terdapat developer yang sedang tidak tersedia");
+                serverChanges.getDevelopers().add(developer);
+                developerRepository.save(developer);
+            }
+            serverChanges.setAssignStatus(DeveloperAssignStatus.Draft);
+        } else {
+            for (String id: devIds){
+                Developer developer = developerRepository.getReferenceById(id);
+                if (developer.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer sedang tidak tersedia");
+                developer.setStatus(DeveloperStatus.Unavailable);
+                serverChanges.getDevelopers().add(developer);
+                developerRepository.save(developer);
+            }
+            Server server = serverChanges.getServer();
+            server.setStatus(Status.MAINTENANCE);
+            serverChanges.setAssignStatus(DeveloperAssignStatus.Assigned);
         }
 
-        Server server = serverChanges.getServer();
-        server.setStatus(Status.MAINTENANCE);
         return finishedMapper(repository.save(serverChanges));
 
     }
@@ -270,24 +280,31 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     public FinishedChangesResponse updateDeveloper(String changesId, AssignUpdateDeveloperRequest request) throws RuntimeException{
         ServerChanges serverChanges = repository.getReferenceById(changesId);
         if (serverChanges.getDevelopers().isEmpty()) throw new RuntimeException("Belum ter-assign developer");
+        if (serverChanges.getAssignStatus() != null && serverChanges.getAssignStatus().equals(DeveloperAssignStatus.Assigned)) throw new RuntimeException("Tidak dapat meng-assign developer");
 
         String[] devIds = request.getDeveloperIds().split(",");
 
-        for (Developer dev: serverChanges.getDevelopers()){
-            dev.setStatus(DeveloperStatus.Available);
-            developerRepository.save(dev);
+        if (request.getAssignStatus().equals(DeveloperAssignStatus.Draft.toString())){
+
+            serverChanges.getDevelopers().clear();
+
+            for (String id: devIds){
+                Developer developerNew = developerRepository.getReferenceById(id);
+                if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
+                serverChanges.getDevelopers().add(developerNew);
+            }
+            serverChanges.setAssignStatus(DeveloperAssignStatus.Draft);
+        } else {
+
+            for (String id: devIds){
+                Developer developerNew = developerRepository.getReferenceById(id);
+                if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
+                developerNew.setStatus(DeveloperStatus.Unavailable);
+                developerRepository.save(developerNew);
+                serverChanges.getDevelopers().add(developerNew);
+            }
+            serverChanges.setAssignStatus(DeveloperAssignStatus.Assigned);
         }
-
-        serverChanges.getDevelopers().clear();
-
-        for (String id: devIds){
-            Developer developerNew = developerRepository.getReferenceById(id);
-            if (developerNew.getStatus().equals(DeveloperStatus.Unavailable)) throw new RuntimeException("Developer tidak tersedia");
-            developerNew.setStatus(DeveloperStatus.Unavailable);
-            developerRepository.save(developerNew);
-            serverChanges.getDevelopers().add(developerNew);
-        }
-
         return finishedMapper(repository.save(serverChanges));
     }
 
@@ -359,6 +376,10 @@ public class ServerChangesServiceImpl implements ServerChangesService{
 
         if (serverChanges.getTanggalSelesai() != null){
             response.setTanggalSelesai(String.valueOf(serverChanges.getTanggalSelesai()));
+        }
+
+        if (serverChanges.getAssignStatus() != null){
+            response.setAssignStatus(String.valueOf(serverChanges.getAssignStatus()));
         }
 
         return response;

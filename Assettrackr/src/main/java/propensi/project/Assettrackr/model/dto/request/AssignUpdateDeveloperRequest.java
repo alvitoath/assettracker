@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class AssignUpdateDeveloperRequest {
     private String developerIds;
+    private String assignStatus;
 }
