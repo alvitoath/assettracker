@@ -337,6 +337,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
                 developerRepository.save(dev);
             }
             serverChanges.setStatus(ServerChangesStatus.Solved);
+            serverChanges.setTanggalSelesai(new Date());
             return finishedMapper(repository.save(serverChanges));
         }
         throw new RuntimeException("Terdapat kesalahan");
@@ -377,6 +378,7 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     private FinishedChangesResponse finishedMapper(ServerChanges serverChanges){
+        System.out.println(serverChanges.getSolution().getId());
         FinishedChangesResponse response = FinishedChangesResponse.builder()
                 .id(serverChanges.getId())
                 .serverId(serverChanges.getServer().getId())
@@ -402,9 +404,9 @@ public class ServerChangesServiceImpl implements ServerChangesService{
         }
 
         if (serverChanges.getSolution() != null){
-            response.setSolution(serverChanges.getSolution().getId());
+            response.setSolutionId(serverChanges.getSolution().getId());
             response.setSolutionStatus(serverChanges.getSolution().getStatus().toString());
-            if (serverChanges.getSolution().getSolution() != null && serverChanges.getSolution().getSolution().isEmpty()) {
+            if (serverChanges.getSolution().getSolution() != null && !serverChanges.getSolution().getSolution().isEmpty()) {
                 response.setSolution(serverChanges.getSolution().getSolution());
             } else {
                 response.setSolution("");
