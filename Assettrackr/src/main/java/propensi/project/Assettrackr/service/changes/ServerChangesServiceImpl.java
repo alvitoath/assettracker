@@ -378,7 +378,6 @@ public class ServerChangesServiceImpl implements ServerChangesService{
     }
 
     private FinishedChangesResponse finishedMapper(ServerChanges serverChanges){
-        System.out.println(serverChanges.getSolution().getId());
         FinishedChangesResponse response = FinishedChangesResponse.builder()
                 .id(serverChanges.getId())
                 .serverId(serverChanges.getServer().getId())
