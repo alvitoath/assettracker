@@ -38,30 +38,60 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String createUser(CreateUserRequest request) throws RuntimeException {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()){
+        // Check if username or email already exists
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new RuntimeException("Username sudah terdaftar");
-        } else if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        }
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email sudah terdaftar");
         }
 
+        // Verify that the divisi exists
         Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
-        if (divisiOpt.isEmpty()){
+        if (divisiOpt.isEmpty()) {
             throw new RuntimeException("Divisi tidak tersedia");
         }
 
         Divisi divisi = divisiOpt.get();
 
-        String password = randomPass();
-        UserModel userModel = userRepository.save(UserModel.builder()
+        // Encrypt the user-provided password
+        String encryptedPassword = encrypt(request.getPassword());
+
+        // Create and save the user
+        UserModel userModel = UserModel.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .nama(request.getNama())
                 .divisi(divisi)
                 .role(Role.valueOf(request.getRole()))
-                .password(encrypt(password))
-                .build());
+                .password(encryptedPassword)
+                .build();
 
-        return password;
+        userRepository.save(userModel);
+//        if (userRepository.findByUsername(request.getUsername()).isPresent()){
+//            throw new RuntimeException("Username sudah terdaftar");
+//        } else if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+//            throw new RuntimeException("Email sudah terdaftar");
+//        }
+//
+//        Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
+//        if (divisiOpt.isEmpty()){
+//            throw new RuntimeException("Divisi tidak tersedia");
+//        }
+//
+//        Divisi divisi = divisiOpt.get();
+//
+//        String password = randomPass();
+//        UserModel userModel = userRepository.save(UserModel.builder()
+//                .email(request.getEmail())
+//                .username(request.getUsername())
+//                .nama(request.getNama())
+//                .divisi(divisi)
+//                .role(Role.valueOf(request.getRole()))
+//                .password(encrypt(password))
+//                .build());
+
+        return "test";
     }
     @Override
     public String login(LoginRequest request) throws RuntimeException{
@@ -129,26 +159,65 @@ public class UserServiceImpl implements UserService {
         return response;
     }
     @Override
-    public boolean updateUser(String id, UserUpdateRequest request) throws RuntimeException{
+    public boolean updateUser(String id, UserUpdateRequest request) throws RuntimeException {
         Optional<UserModel> userOpt = userRepository.findById(id);
-        if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("User is not found");
+        }
         UserModel user = userOpt.get();
 
+        // Check if the username is already taken by another user
         Optional<UserModel> checkSameNameUser = userRepository.findByUsername(request.getUsername());
+        if (checkSameNameUser.isPresent() && !checkSameNameUser.get().getId().equals(user.getId())) {
+            throw new RuntimeException("Username sudah digunakan");
+        }
 
-        if (checkSameNameUser.isPresent() && !String.valueOf(checkSameNameUser.get().getId()).equals(id)) throw new RuntimeException("Username sudah digunakan");
-
-
-        if (!request.getUsername().isEmpty()) user.setUsername(request.getUsername());
-        if (!request.getDivisi().isEmpty()){
+        // Update fields if provided
+        if (!request.getUsername().isEmpty()) {
+            user.setUsername(request.getUsername());
+        }
+        if (!request.getDivisi().isEmpty()) {
             Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
-            if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak dapat ditemukan");
+            if (divisiOpt.isEmpty()) {
+                throw new RuntimeException("Divisi tidak dapat ditemukan");
+            }
             user.setDivisi(divisiOpt.get());
         }
-        if (!request.getRole().isEmpty()) user.setRole(Role.valueOf(request.getRole()));
+        if (!request.getRole().isEmpty()) {
+            user.setRole(Role.valueOf(request.getRole()));
+        }
+
+        // Update password if provided and not empty
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            String encryptedPassword = passwordEncoder.encode(request.getPassword());
+            user.setPassword(encryptedPassword);
+        }
+
         userRepository.save(user);
         return true;
     }
+
+    //    @Override
+//    public boolean updateUser(String id, UserUpdateRequest request) throws RuntimeException{
+//        Optional<UserModel> userOpt = userRepository.findById(id);
+//        if (userOpt.isEmpty()) throw new RuntimeException("User is not found");
+//        UserModel user = userOpt.get();
+//
+//        Optional<UserModel> checkSameNameUser = userRepository.findByUsername(request.getUsername());
+//
+//        if (checkSameNameUser.isPresent() && !String.valueOf(checkSameNameUser.get().getId()).equals(id)) throw new RuntimeException("Username sudah digunakan");
+//
+//
+//        if (!request.getUsername().isEmpty()) user.setUsername(request.getUsername());
+//        if (!request.getDivisi().isEmpty()){
+//            Optional<Divisi> divisiOpt = divisiRepository.findByNama(request.getDivisi());
+//            if (divisiOpt.isEmpty()) throw new RuntimeException("Divisi tidak dapat ditemukan");
+//            user.setDivisi(divisiOpt.get());
+//        }
+//        if (!request.getRole().isEmpty()) user.setRole(Role.valueOf(request.getRole()));
+//        userRepository.save(user);
+//        return true;
+//    }
     @Override
     public boolean deleteUser(String id) throws RuntimeException{
         Optional<UserModel> userOpt = userRepository.findById(id);

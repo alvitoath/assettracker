@@ -10,6 +10,7 @@ import propensi.project.Assettrackr.model.dto.request.CreateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.repository.DeveloperRepository;
+import propensi.project.Assettrackr.exception.DuplicateDeveloperNameException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,35 @@ public class DeveloperServiceImpl implements DeveloperService{
 
     @Override
     public DeveloperResponse createDeveloper(CreateDeveloperRequest request) {
+        // Cek apakah nama sudah ada
+        if (repository.existsByNama(request.getNama())) {
+            throw new DuplicateDeveloperNameException("Nama Developer sudah digunakan");
+        }
+
         Developer developer = Developer.builder()
                 .nama(request.getNama())
                 .keahlian(request.getKeahlian())
                 .serverChanges(new ArrayList<ServerChanges>())
-                .status(DeveloperStatus.Available).build();
+                .status(DeveloperStatus.Available)
+                .build();
+
         repository.save(developer);
 
         return mapper(developer);
     }
+
+
+//    @Override
+//    public DeveloperResponse createDeveloper(CreateDeveloperRequest request) {
+//        Developer developer = Developer.builder()
+//                .nama(request.getNama())
+//                .keahlian(request.getKeahlian())
+//                .serverChanges(new ArrayList<ServerChanges>())
+//                .status(DeveloperStatus.Available).build();
+//        repository.save(developer);
+//
+//        return mapper(developer);
+//    }
 
     @Override
     public DeveloperResponse updateDeveloper(UpdateDeveloperRequest request, String id) throws Exception {

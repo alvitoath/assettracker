@@ -9,6 +9,7 @@ import propensi.project.Assettrackr.model.dto.request.CreateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.request.UpdateDeveloperRequest;
 import propensi.project.Assettrackr.model.dto.response.DeveloperResponse;
 import propensi.project.Assettrackr.service.developer.DeveloperService;
+import propensi.project.Assettrackr.exception.DuplicateDeveloperNameException;
 
 import java.util.List;
 
@@ -20,10 +21,26 @@ public class DeveloperController {
 
     @PostMapping("/create")
     public ResponseEntity<RestResponse> createDeveloper(@RequestBody CreateDeveloperRequest request){
-        DeveloperResponse data = service.createDeveloper(request);
-        RestResponse response = new RestResponse("Developer successfully created", data);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        try {
+            DeveloperResponse data = service.createDeveloper(request);
+            RestResponse response = new RestResponse("Developer successfully created", data);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (DuplicateDeveloperNameException e) {
+            RestResponse response = new RestResponse(e.getMessage(), null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            RestResponse response = new RestResponse("Terjadi kesalahan", null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
+//    @PostMapping("/create")
+//    public ResponseEntity<RestResponse> createDeveloper(@RequestBody CreateDeveloperRequest request){
+//        DeveloperResponse data = service.createDeveloper(request);
+//        RestResponse response = new RestResponse("Developer successfully created", data);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     @PutMapping("/update/{developerId}")
     public ResponseEntity<RestResponse> updateDeveloper(@RequestBody UpdateDeveloperRequest request, @PathVariable("developerId")String id){

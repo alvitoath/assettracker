@@ -23,14 +23,20 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody CreateUserRequest request){
-        try {
-            String password = service.createUser(request);
-            return ResponseEntity.ok(password);
-        } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(getStackTraceAsString(e));
-        }
+    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
+        service.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<String> createUser(@RequestBody CreateUserRequest request){
+//        try {
+//            String password = service.createUser(request);
+//            return ResponseEntity.ok(password);
+//        } catch (RuntimeException e){
+//            return ResponseEntity.badRequest().body(getStackTraceAsString(e));
+//        }
+//    }
     private String getStackTraceAsString(Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
